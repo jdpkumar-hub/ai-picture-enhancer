@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 from auth import login, signup, reset_password
-from enhance import enhance_image
+from enhance import clean_product_image, enhance_photo
 
 st.set_page_config(page_title="AI Image Cleaner", layout="wide")
 
@@ -143,8 +143,10 @@ if st.session_state.user:
 
             if st.button("✨ Clean Image"):
                 with st.spinner("AI cleaning your image..."):
-                    result = enhance_image(img)
-
+                    if enhance_type == "Full Clean (Recommended)":
+                        result = clean_product_image(img)
+                    else:
+                        result = enhance_photo(img)
                 with col2:
                     st.image(result, caption="Enhanced", use_column_width=True)
 
