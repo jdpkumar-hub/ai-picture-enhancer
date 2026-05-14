@@ -39,20 +39,26 @@ def clean_product_image(image):
 # =========================================
 # NORMAL PHOTO ENHANCEMENT
 # =========================================
+# =========================================
+# NORMAL PHOTO ENHANCEMENT
+# =========================================
 def enhance_photo(image):
 
     image = image.convert("RGB")
 
-    # Gentle enhancement
-    image = image.filter(ImageFilter.SMOOTH)
+    # Mild sharpening
+    image = image.filter(ImageFilter.SHARPEN)
 
+    # Slight contrast boost
     enhancer = ImageEnhance.Contrast(image)
-    image = enhancer.enhance(1.08)
+    image = enhancer.enhance(1.05)
 
+    # Slight sharpness boost
     enhancer = ImageEnhance.Sharpness(image)
-    image = enhancer.enhance(1.1)
+    image = enhancer.enhance(1.15)
 
+    # Tiny brightness improvement
     enhancer = ImageEnhance.Brightness(image)
-    image = enhancer.enhance(1.03)
+    image = enhancer.enhance(1.02)
 
     return image
