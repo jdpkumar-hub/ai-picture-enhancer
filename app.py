@@ -115,46 +115,63 @@ if not st.session_state.user:
 # =========================================================
 # 🚀 MAIN APP
 # =========================================================
-if st.session_state.user:
+# ---------- ENHANCE ----------
+if option == "Enhance Image":
 
-    st.sidebar.success(f"Welcome {st.session_state.user.email}")
+    st.subheader("Upload & Clean Your Product Image")
 
-    option = st.sidebar.radio("Menu", ["Enhance Image", "Logout"])
+    # 🔥 Enhancement Type
+    enhance_type = st.selectbox(
+        "Enhancement Type",
+        ["Full Clean (Recommended)", "Photo Enhance"]
+    )
 
-    # ---------- LOGOUT ----------
-    if option == "Logout":
-        st.session_state.user = None
-        st.rerun()
+    uploaded = st.file_uploader(
+        "Upload Image",
+        type=["png", "jpg", "jpeg"]
+    )
 
-    # ---------- ENHANCE ----------
-    if option == "Enhance Image":
+    if uploaded:
 
-        st.subheader("Upload & Clean Your Product Image")
+        img = Image.open(uploaded)
 
-        uploaded = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg"])
+        col1, col2 = st.columns(2)
 
-        if uploaded:
-            img = Image.open(uploaded)
+        with col1:
+            st.image(
+                img,
+                caption="Original",
+                use_column_width=True
+            )
 
-            col1, col2 = st.columns(2)
+        # 🔥 PROCESS BUTTON
+        if st.button("✨ Clean Image"):
 
-            with col1:
-                st.image(img, caption="Original", use_column_width=True)
+            with st.spinner("AI processing image..."):
 
-            if st.button("✨ Clean Image"):
-                with st.spinner("AI cleaning your image..."):
-                    if enhance_type == "Full Clean (Recommended)":
-                        result = clean_product_image(img)
-                    else:
-                        result = enhance_photo(img)
-                with col2:
-                    st.image(result, caption="Enhanced", use_column_width=True)
+                # PRODUCT CLEAN
+                if enhance_type == "Full Clean (Recommended)":
+                    result = clean_product_image(img)
 
-                result.save("output.png")
+                # PHOTO ENHANCE
+                else:
+                    result = enhance_photo(img)
 
-                with open("output.png", "rb") as f:
-                    st.download_button(
-                        "📥 Download Clean Image",
-                        f,
-                        file_name="cleaned_image.png"
-                    )
+            with col2:
+                st.image(
+                    result,
+                    caption="Enhanced",
+                    use_column_width=True
+                )
+
+            # SAVE OUTPUT
+            result.save("output.png")
+
+            # DOWNLOAD BUTTON
+            with open("output.png", "rb") as f:
+
+                st.download_button(
+                    "📥 Download Clean Image",
+                    f,
+                    file_name="cleaned_image.png"
+                )
