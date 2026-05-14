@@ -135,11 +135,26 @@ if st.session_state.user:
         st.subheader("Upload & Clean Your Product Image")
 
         # 🔥 Enhancement Type
+        
         enhance_type = st.selectbox(
             "Enhancement Type",
-            ["Full Clean (Recommended)", "Photo Enhance"]
+            ["Product Clean", "Photo Enhance"]
         )
+        
+        photo_mode = "Natural"
 
+        if enhance_type == "Photo Enhance":
+
+            photo_mode = st.selectbox(
+                "Photo Style",
+                [
+                    "Natural",
+                    "Sharp",
+                    "Bright",
+                    "Social Media"
+                ]
+            )
+            
         uploaded = st.file_uploader(
             "Upload Image",
             type=["png", "jpg", "jpeg"]
@@ -154,7 +169,7 @@ if st.session_state.user:
             with col1:
                 st.image(
                     img,
-                    caption="Original",
+                    caption="Before",
                     use_column_width=True
                 )
 
@@ -168,13 +183,13 @@ if st.session_state.user:
                         result = clean_product_image(img)
 
                     # PHOTO ENHANCE
-                    else:
-                        result = enhance_photo(img)
+                    else:                        
+                        result = enhance_photo(img, photo_mode)
 
                 with col2:
                     st.image(
                         result,
-                        caption="Enhanced",
+                        caption="After",
                         use_column_width=True
                     )
 

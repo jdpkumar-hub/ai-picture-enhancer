@@ -42,23 +42,63 @@ def clean_product_image(image):
 # =========================================
 # NORMAL PHOTO ENHANCEMENT
 # =========================================
-def enhance_photo(image):
+# =========================================
+# ADVANCED PHOTO ENHANCEMENT
+# =========================================
+def enhance_photo(image, mode="Natural"):
 
     image = image.convert("RGB")
 
-    # Mild sharpening
-    image = image.filter(ImageFilter.SHARPEN)
+    # ---------------------------------
+    # NATURAL
+    # ---------------------------------
+    if mode == "Natural":
 
-    # Slight contrast boost
-    enhancer = ImageEnhance.Contrast(image)
-    image = enhancer.enhance(1.05)
+        enhancer = ImageEnhance.Contrast(image)
+        image = enhancer.enhance(1.05)
 
-    # Slight sharpness boost
-    enhancer = ImageEnhance.Sharpness(image)
-    image = enhancer.enhance(1.15)
+        enhancer = ImageEnhance.Sharpness(image)
+        image = enhancer.enhance(1.12)
 
-    # Tiny brightness improvement
-    enhancer = ImageEnhance.Brightness(image)
-    image = enhancer.enhance(1.02)
+        enhancer = ImageEnhance.Brightness(image)
+        image = enhancer.enhance(1.02)
+
+    # ---------------------------------
+    # SHARP
+    # ---------------------------------
+    elif mode == "Sharp":
+
+        image = image.filter(ImageFilter.SHARPEN)
+
+        enhancer = ImageEnhance.Contrast(image)
+        image = enhancer.enhance(1.1)
+
+        enhancer = ImageEnhance.Sharpness(image)
+        image = enhancer.enhance(1.3)
+
+    # ---------------------------------
+    # BRIGHT
+    # ---------------------------------
+    elif mode == "Bright":
+
+        enhancer = ImageEnhance.Brightness(image)
+        image = enhancer.enhance(1.15)
+
+        enhancer = ImageEnhance.Contrast(image)
+        image = enhancer.enhance(1.05)
+
+    # ---------------------------------
+    # SOCIAL MEDIA
+    # ---------------------------------
+    elif mode == "Social Media":
+
+        enhancer = ImageEnhance.Color(image)
+        image = enhancer.enhance(1.2)
+
+        enhancer = ImageEnhance.Contrast(image)
+        image = enhancer.enhance(1.1)
+
+        enhancer = ImageEnhance.Sharpness(image)
+        image = enhancer.enhance(1.15)
 
     return image
