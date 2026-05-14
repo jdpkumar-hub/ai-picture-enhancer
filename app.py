@@ -2,6 +2,7 @@ import streamlit as st
 from PIL import Image
 from auth import login, signup, reset_password
 from enhance import clean_product_image, enhance_photo
+from ai_restore import restore_face
 
 st.set_page_config(page_title="AI Image Cleaner", layout="wide")
 
@@ -138,8 +139,12 @@ if st.session_state.user:
         
         enhance_type = st.selectbox(
             "Enhancement Type",
-            ["Product Clean", "Photo Enhance"]
-        )
+            [
+                "Product Clean",
+                "Photo Enhance",
+                "AI Face Restore"
+            ]
+        )        
         
         photo_mode = "Natural"
 
@@ -179,12 +184,21 @@ if st.session_state.user:
                 with st.spinner("AI processing image..."):
 
                     # PRODUCT CLEAN
+                    # PRODUCT CLEAN
                     if enhance_type == "Product Clean":
                         result = clean_product_image(img)
 
                     # PHOTO ENHANCE
-                    else:                        
+                    elif enhance_type == "Photo Enhance":
                         result = enhance_photo(img, photo_mode)
+
+                    # AI FACE RESTORE
+                    else:
+                        restored_url = restore_face(uploaded)
+
+                        st.image(restored_url, caption="AI Restored")
+                        st.stop()                    
+                    
 
                 with col2:
                     st.image(
