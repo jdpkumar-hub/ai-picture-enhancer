@@ -179,7 +179,7 @@ if st.session_state.user:
                 with st.spinner("AI processing image..."):
 
                     # PRODUCT CLEAN
-                    if enhance_type == "Full Clean (Recommended)":
+                    if enhance_type == "Product Clean":
                         result = clean_product_image(img)
 
                     # PHOTO ENHANCE
