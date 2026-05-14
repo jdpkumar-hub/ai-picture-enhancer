@@ -25,6 +25,6 @@ def reset_password(email):
     return supabase.auth.reset_password_email(
         email,
         {
-            "redirect_to": "https://wequqsbvhydvugifevhm.supabase.co/auth/v1/verify"
+            "redirect_to": "https://ai-enhancer.streamlit.app/"
         }
     )
