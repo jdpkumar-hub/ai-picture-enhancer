@@ -6,4 +6,4 @@ stripe
 python-dotenv
 rembg
 onnxruntime
-replicate
+replicate>=0.22.0
