@@ -1,6 +1,6 @@
 import streamlit as st
 from PIL import Image
-from auth import login, signup
+from auth import login, signup, reset_password
 from enhance import enhance_image
 
 st.set_page_config(page_title="AI Image Cleaner", layout="wide")
@@ -35,42 +35,75 @@ if "user" not in st.session_state:
 # =========================================================
 if not st.session_state.user:
 
-    menu = st.sidebar.selectbox("Menu", ["Login", "Signup"])
+    menu = st.sidebar.selectbox(
+        "Menu",
+        ["Login", "Signup", "Reset Password"]
+    )
 
     # ---------- LOGIN ----------
     if menu == "Login":
+
         st.subheader("Login")
 
         email = st.text_input("Email")
         password = st.text_input("Password", type="password")
 
         if st.button("Login"):
-            try:
-                res = login(email, password)
 
-                if res.user:
-                    st.session_state.user = res.user
-                    st.success("Login successful!")
-                    st.rerun()
-                else:
-                    st.error("Invalid email or password")
+            if not email or not password:
+                st.warning("Enter email and password")
 
-            except Exception as e:
-                st.error(f"Login failed: {str(e)}")
+            else:
+                try:
+                    res = login(email, password)
+
+                    if res.user:
+                        st.session_state.user = res.user
+                        st.success("Login successful!")
+                        st.rerun()
+
+                    else:
+                        st.error("Invalid email or password")
+
+                except Exception as e:
+                    st.error(f"Login failed: {str(e)}")
 
     # ---------- SIGNUP ----------
     elif menu == "Signup":
+
         st.subheader("Create Account")
 
-        email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
+        email = st.text_input("New Email")
+        password = st.text_input("New Password", type="password")
 
         if st.button("Signup"):
+
+            if len(password) < 6:
+                st.warning("Password must be at least 6 characters")
+
+            else:
+                try:
+                    signup(email, password)
+                    st.success("Account created! Verify your email.")
+
+                except Exception as e:
+                    st.error(f"Signup failed: {str(e)}")
+
+    # ---------- RESET PASSWORD ----------
+    elif menu == "Reset Password":
+
+        st.subheader("Reset Password")
+
+        email = st.text_input("Enter your email")
+
+        if st.button("Send Reset Link"):
+
             try:
-                signup(email, password)
-                st.success("Account created! Please verify email.")
-            except Exception:
-                st.error("Signup failed")
+                reset_password(email)
+                st.success("Password reset email sent!")
+
+            except Exception as e:
+                st.error(f"Reset failed: {str(e)}")
 
 # =========================================================
 # 🚀 MAIN APP
