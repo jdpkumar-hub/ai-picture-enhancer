@@ -103,7 +103,14 @@ if not st.session_state.user:
                 st.success("Password reset email sent!")
 
             except Exception as e:
-                st.error(f"Reset failed: {str(e)}")
+
+                msg = str(e)
+
+                if "rate limit" in msg.lower():
+                    st.warning("Too many reset requests. Please wait a few minutes.")
+
+                else:
+                    st.error(f"Reset failed: {msg}")
 
 # =========================================================
 # 🚀 MAIN APP
