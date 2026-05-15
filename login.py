@@ -1,92 +1,87 @@
 import streamlit as st
 
 from auth import (
-    send_otp,
-    verify_otp,
     google_login,
-    supabase
+    send_otp_login,
+    verify_otp
 )
 
 # =====================================================
-# HANDLE GOOGLE CALLBACK
+# LOGIN PAGE
 # =====================================================
 
+def show_login():
 
-# =====================================================
-# UI
-# =====================================================
+    st.title("🚀 AI Product Image Cleaner")
 
-st.title("🚀 AI Product Image Cleaner")
+    st.subheader("Login")
 
-st.subheader("Login")
+    # =================================================
+    # GOOGLE LOGIN
+    # =================================================
 
-# =====================================================
-# GOOGLE LOGIN
-# =====================================================
+    google_url = google_login()
 
-google_url = google_login()
+    if google_url:
 
-if google_url:
+        st.link_button(
+            "🔵 Continue with Google",
+            google_url
+        )
 
-    st.link_button(
-        "🔵 Continue with Google",
-        google_url
-    )
+    st.markdown("---")
 
-st.markdown("---")
+    # =================================================
+    # OTP LOGIN
+    # =================================================
 
-# =====================================================
-# EMAIL OTP LOGIN
-# =====================================================
+    email = st.text_input("Email")
 
-email = st.text_input("Email")
+    if st.button("Send OTP"):
 
-if st.button("Send OTP"):
+        if email:
 
-    try:
+            try:
 
-        send_otp(email)
+                send_otp_login(email)
 
-        st.session_state.otp_email = email
+                st.session_state.otp_email = email
 
-        st.success("OTP sent to your email")
+                st.success("OTP sent to email")
 
-    except Exception as e:
+            except Exception as e:
 
-        st.error(str(e))
+                st.error(f"OTP failed: {str(e)}")
 
-# =====================================================
-# VERIFY OTP
-# =====================================================
+        else:
 
-if "otp_email" in st.session_state:
+            st.warning("Enter email")
 
-    otp = st.text_input("Enter OTP")
+    # =================================================
+    # VERIFY OTP
+    # =================================================
 
-    if st.button("Verify OTP"):
+    if "otp_email" in st.session_state:
 
-        try:
+        otp = st.text_input("Enter OTP")
 
-            res = verify_otp(
-                st.session_state.otp_email,
-                otp
-            )
+        if st.button("Verify OTP"):
 
-            if res and res.user:
+            try:
 
-                st.session_state.user = res.user
+                res = verify_otp(
+                    st.session_state.otp_email,
+                    otp
+                )
 
-                st.success("Login successful!")
+                if res.user:
 
-                st.rerun()
+                    st.session_state.user = res.user
 
-            else:
+                    st.success("Login successful!")
 
-                st.error("Invalid OTP")
+                    st.switch_page("pages/1_Enhance.py")
 
-        except Exception as e:
+            except Exception as e:
 
-            st.error(str(e))
-            
-if __name__ == "__main__":
-    show_login()
+                st.error(f"Verification failed: {str(e)}")
