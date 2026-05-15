@@ -1,88 +1,82 @@
 import streamlit as st
-from supabase import create_client
+from supabase import create_client, Client
 
-# ======================================================
-# SUPABASE
-# ======================================================
+# =====================================================
+# SUPABASE CONNECTION
+# =====================================================
 
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
-supabase = create_client(
+supabase: Client = create_client(
     SUPABASE_URL,
     SUPABASE_KEY
 )
 
-# ======================================================
-# IMPORTANT
-# ======================================================
+# =====================================================
+# SEND EMAIL OTP
+# =====================================================
 
-REDIRECT_URL = "https://ai-enhancer.streamlit.app"
+def send_otp(email):
 
-# ======================================================
-# LOGIN
-# ======================================================
+    try:
 
-def login(email, password):
+        supabase.auth.sign_in_with_otp({
+            "email": email
+        })
 
-    return supabase.auth.sign_in_with_password({
-        "email": email,
-        "password": password
-    })
+        return True
 
-# ======================================================
-# SIGNUP
-# ======================================================
+    except Exception as e:
 
-def signup(email, password):
+        raise Exception(str(e))
 
-    return supabase.auth.sign_up({
-        "email": email,
-        "password": password
-    })
+# =====================================================
+# VERIFY OTP
+# =====================================================
 
-# ======================================================
+def verify_otp(email, otp):
+
+    try:
+
+        response = supabase.auth.verify_otp({
+            "email": email,
+            "token": otp,
+            "type": "email"
+        })
+
+        return response
+
+    except Exception as e:
+
+        raise Exception(str(e))
+
+# =====================================================
 # GOOGLE LOGIN
-# ======================================================
+# =====================================================
+
 def google_login():
 
     try:
 
         redirect_url = "https://ai-enhancer.streamlit.app"
 
-        response = supabase.auth.sign_in_with_oauth(
-            {
-                "provider": "google",
-                "options": {
-                    "redirect_to": redirect_url
-                }
+        response = supabase.auth.sign_in_with_oauth({
+            "provider": "google",
+            "options": {
+                "redirect_to": redirect_url
             }
-        )
+        })
 
         return response.url
 
     except Exception as e:
 
-        st.error(f"Google login error: {str(e)}")
-        return None
-        
+        raise Exception(str(e))
 
-# ======================================================
-# RESET PASSWORD
-# ======================================================
-
-def reset_password(email):
-
-    return supabase.auth.reset_password_email(
-        email,
-        {
-            "redirect_to": REDIRECT_URL
-        }
-    )
-
-# ======================================================
-# GET USER
-# ======================================================
+# =====================================================
+# GET CURRENT USER
+# =====================================================
 
 def get_user():
 
@@ -96,16 +90,19 @@ def get_user():
         return None
 
     except:
+
         return None
 
-# ======================================================
+# =====================================================
 # LOGOUT
-# ======================================================
+# =====================================================
 
 def logout():
 
     try:
+
         supabase.auth.sign_out()
 
-    except Exception:
+    except:
+
         pass
