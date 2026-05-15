@@ -52,18 +52,6 @@ def send_otp_login(email):
         "email": email
     })
 
-# =====================================================
-# VERIFY OTP
-# =====================================================
-
-def verify_otp(email, otp):
-
-    return supabase.auth.verify_otp({
-
-        "email": email,
-        "token": otp,
-        "type": "email"
-    })
 
 # =====================================================
 # GET USER
