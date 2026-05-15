@@ -8,6 +8,7 @@ from auth import (
     get_user
 )
 from enhance import clean_product_image, enhance_photo
+from auth import supabase
 
 from storage import (
     upload_image,
@@ -17,7 +18,37 @@ from storage import (
 )
 
 import io
+# =====================================================
+# HANDLE GOOGLE OAUTH CALLBACK
+# =====================================================
 
+query_params = st.query_params
+
+if "code" in query_params:
+
+    try:
+
+        code = query_params["code"]
+
+        supabase.auth.exchange_code_for_session({
+            "auth_code": code
+        })
+
+        user_data = supabase.auth.get_user()
+
+        if user_data and user_data.user:
+
+            st.session_state.user = user_data.user
+
+            # Clean URL
+            st.query_params.clear()
+
+            st.rerun()
+
+    except Exception as e:
+
+        st.error(f"Google login failed: {str(e)}")
+        
 # Restore logged user
 if "user" not in st.session_state:
     st.session_state.user = get_user()
