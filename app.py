@@ -2,7 +2,6 @@ import streamlit as st
 from PIL import Image
 from auth import login, signup, reset_password
 from enhance import clean_product_image, enhance_photo
-from ai_restore import restore_face
 from storage import upload_image, save_history, get_history
 import io
 
@@ -165,8 +164,7 @@ if st.session_state.user:
             "Enhancement Type",
             [
                 "Product Clean",
-                "Photo Enhance",
-                "AI Face Restore"
+                "Photo Enhance"                
             ]
         )        
         
@@ -216,13 +214,7 @@ if st.session_state.user:
                     elif enhance_type == "Photo Enhance":
                         result = enhance_photo(img, photo_mode)
 
-                    # AI FACE RESTORE
-                    else:
-                        restored_url = restore_face(uploaded)
-
-                        st.image(restored_url, caption="AI Restored")
-                        st.stop()                    
-                    
+                  
 
                 with col2:
                     st.image(
@@ -236,6 +228,44 @@ if st.session_state.user:
 
                 # DOWNLOAD BUTTON
                 with open("output.png", "rb") as f:
+                    # =====================================
+                    # SAVE ORIGINAL IMAGE
+                    # =====================================
+                    original_buffer = io.BytesIO()
+
+                    img.save(
+                        original_buffer,
+                        format="PNG"
+                    )
+
+                    original_url = upload_image(
+                        original_buffer.getvalue(),
+                        "original.png"
+                    )
+
+                    # =====================================
+                    # SAVE ENHANCED IMAGE
+                    # =====================================
+                    enhanced_buffer = io.BytesIO()
+
+                    result.save(
+                        enhanced_buffer,
+                        format="PNG"
+                    )
+
+                    enhanced_url = upload_image(
+                        enhanced_buffer.getvalue(),
+                        "enhanced.png"
+                    )
+
+                    # =====================================
+                    # SAVE HISTORY
+                    # =====================================
+                    save_history(
+                        st.session_state.user.email,
+                        original_url,
+                        enhanced_url
+                    )                
 
                     st.download_button(
                         "📥 Download Clean Image",
@@ -243,26 +273,3 @@ if st.session_state.user:
                         file_name="cleaned_image.png"
                     )
                     
-        # SAVE ORIGINAL
-        original_buffer = io.BytesIO()
-        img.save(original_buffer, format="PNG")
-
-        original_url = upload_image(
-            original_buffer.getvalue(),
-            "original.png"
-        )
-
-        # SAVE ENHANCED
-        enhanced_buffer = io.BytesIO()
-        result.save(enhanced_buffer, format="PNG")
-
-        enhanced_url = upload_image(
-            enhanced_buffer.getvalue(),
-            "enhanced.png"
-        )
-        # SAVE HISTORY
-        save_history(
-            st.session_state.user.email,
-            original_url,
-            enhanced_url
-        )
