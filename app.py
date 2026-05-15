@@ -261,12 +261,24 @@ if st.session_state.user:
                     # =====================================
                     # SAVE HISTORY
                     # =====================================
-                    save_history(
-                        st.session_state.user.email,
+                    def save_history(
+                        email,
                         original_url,
-                        enhanced_url
-                    )                
+                        enhanced_url,
+                        enhancement_type,
+                        original_path,
+                        enhanced_path
+                    ):
 
+                        supabase.table("history").insert({
+                            "user_email": email,
+                            "original_url": original_url,
+                            "enhanced_url": enhanced_url,
+                            "enhancement_type": enhancement_type,
+                            "original_path": original_path,
+                            "enhanced_path": enhanced_path
+                        }).execute()
+                    
                     st.download_button(
                         "📥 Download Clean Image",
                         f,
