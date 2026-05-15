@@ -49,7 +49,7 @@ def reset_password(email):
         email,
         {
             "redirect_to":
-            "https://ai-enhancer.streamlit.app"
+            "https://ai-enhancer.streamlit.app/?type=recovery"
         }
     )
 

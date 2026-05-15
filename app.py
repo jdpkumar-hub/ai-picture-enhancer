@@ -22,7 +22,59 @@ st.set_page_config(
 # =====================================================
 
 query_params = st.query_params
+# =====================================================
+# PASSWORD RECOVERY
+# =====================================================
 
+if "type" in query_params:
+
+    if query_params["type"] == "recovery":
+
+        st.title("🔒 Reset Password")
+
+        new_password = st.text_input(
+            "New Password",
+            type="password"
+        )
+
+        confirm_password = st.text_input(
+            "Confirm Password",
+            type="password"
+        )
+
+        if st.button("Update Password"):
+
+            if new_password != confirm_password:
+
+                st.error("Passwords do not match")
+
+            elif len(new_password) < 6:
+
+                st.error("Password too short")
+
+            else:
+
+                try:
+
+                    supabase.auth.update_user({
+
+                        "password": new_password
+                    })
+
+                    st.success(
+                        "Password updated successfully!"
+                    )
+
+                    st.info(
+                        "Please login again"
+                    )
+
+                except Exception as e:
+
+                    st.error(str(e))
+
+        st.stop()
+#=============================================================
 if "code" in query_params:
 
     try:
