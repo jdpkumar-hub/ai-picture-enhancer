@@ -1,11 +1,10 @@
 import streamlit as st
 from PIL import Image
 from auth import (
-    login,
     signup,
+    login,
     reset_password,
     google_login,
-    logout,
     get_user
 )
 from enhance import clean_product_image, enhance_photo
