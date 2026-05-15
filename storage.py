@@ -29,14 +29,21 @@ def upload_image(file_bytes, folder="originals"):
 # =========================================
 # SAVE HISTORY
 # =========================================
-def save_history(email, original_url, enhanced_url):
+def save_history(email,
+                 original_url,
+                 enhanced_url,
+                 enhancement_type,
+                 original_path,
+                 enhanced_path):
 
-    supabase.table("image_history").insert({
+    supabase.table("history").insert({
         "user_email": email,
         "original_url": original_url,
-        "enhanced_url": enhanced_url
+        "enhanced_url": enhanced_url,
+        "enhancement_type": enhancement_type,
+        "original_path": original_path,
+        "enhanced_path": enhanced_path
     }).execute()
-
 # =========================================
 # GET HISTORY
 # =========================================
@@ -52,7 +59,19 @@ def get_history(email):
 # =========================================
 # DELETE HISTORY
 # =========================================
+        
 def delete_history_item(item_id, original_path, enhanced_path):
+    if st.button("🗑 Delete", key=row["id"]):
+
+        deleted = delete_history_item(
+            row["id"],
+            row["original_path"],
+            row["enhanced_path"]
+        )
+
+        if deleted:
+            st.success("Deleted!")
+            st.rerun()
     try:
         # Delete images from bucket
         supabase.storage.from_("images").remove([
@@ -68,8 +87,4 @@ def delete_history_item(item_id, original_path, enhanced_path):
     except Exception as e:
         print(e)
         return False
-
-
-# =========================================
-# DELETE HISTORY
-# =========================================        
+     
