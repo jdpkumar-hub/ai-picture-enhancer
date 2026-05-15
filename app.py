@@ -18,6 +18,10 @@ from storage import (
 
 import io
 
+# Restore logged user
+if "user" not in st.session_state:
+    st.session_state.user = get_user()
+    
 # =========================================================
 # PAGE CONFIG
 # =========================================================

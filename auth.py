@@ -44,22 +44,28 @@ def signup(email, password):
 # ======================================================
 # GOOGLE LOGIN
 # ======================================================
-
 def google_login():
 
     try:
 
-        oauth = supabase.auth.sign_in_with_oauth({
-            "provider": "google",
-            "options": {
-                "redirect_to": REDIRECT_URL
+        redirect_url = "https://ai-enhancer.streamlit.app"
+
+        response = supabase.auth.sign_in_with_oauth(
+            {
+                "provider": "google",
+                "options": {
+                    "redirect_to": redirect_url
+                }
             }
-        })
+        )
 
-        return oauth.url
+        return response.url
 
-    except Exception:
+    except Exception as e:
+
+        st.error(f"Google login error: {str(e)}")
         return None
+        
 
 # ======================================================
 # RESET PASSWORD
@@ -82,14 +88,14 @@ def get_user():
 
     try:
 
-        session = supabase.auth.get_session()
+        response = supabase.auth.get_user()
 
-        if session and session.user:
-            return session.user
+        if response and response.user:
+            return response.user
 
         return None
 
-    except Exception:
+    except:
         return None
 
 # ======================================================
