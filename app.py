@@ -243,26 +243,26 @@ if st.session_state.user:
                         file_name="cleaned_image.png"
                     )
                     
-# SAVE ORIGINAL
-original_buffer = io.BytesIO()
-img.save(original_buffer, format="PNG")
+        # SAVE ORIGINAL
+        original_buffer = io.BytesIO()
+        img.save(original_buffer, format="PNG")
 
-original_url = upload_image(
-    original_buffer.getvalue(),
-    "original.png"
-)
+        original_url = upload_image(
+            original_buffer.getvalue(),
+            "original.png"
+        )
 
-# SAVE ENHANCED
-enhanced_buffer = io.BytesIO()
-result.save(enhanced_buffer, format="PNG")
+        # SAVE ENHANCED
+        enhanced_buffer = io.BytesIO()
+        result.save(enhanced_buffer, format="PNG")
 
-enhanced_url = upload_image(
-    enhanced_buffer.getvalue(),
-    "enhanced.png"
-)
-# SAVE HISTORY
-save_history(
-    st.session_state.user.email,
-    original_url,
-    enhanced_url
-)
+        enhanced_url = upload_image(
+            enhanced_buffer.getvalue(),
+            "enhanced.png"
+        )
+        # SAVE HISTORY
+        save_history(
+            st.session_state.user.email,
+            original_url,
+            enhanced_url
+        )
