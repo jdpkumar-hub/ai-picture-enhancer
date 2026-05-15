@@ -1,6 +1,13 @@
 import streamlit as st
 from PIL import Image
-from auth import login, signup, reset_password
+from auth import (
+    login,
+    signup,
+    reset_password,
+    google_login,
+    logout,
+    get_user
+)
 from enhance import clean_product_image, enhance_photo
 
 from storage import (
@@ -70,7 +77,7 @@ st.title("🚀 AI Product Image Cleaner")
 # =========================================================
 
 if "user" not in st.session_state:
-    st.session_state.user = None
+    st.session_state.user = get_user()
 
 # =========================================================
 # AUTH SECTION
@@ -112,7 +119,7 @@ if not st.session_state.user:
 
                     res = login(email, password)
 
-                    if res.user:
+                    if res and res.user:
 
                         st.session_state.user = res.user
 
@@ -125,6 +132,19 @@ if not st.session_state.user:
 
                 except Exception as e:
                     st.error(f"Login failed: {str(e)}")
+    # =====================================================
+    # GOOGLE
+    # =====================================================                    
+                    
+        st.markdown("---")
+
+        google_url = google_login()
+
+        if google_url:
+            st.link_button(
+                "🔵 Continue with Google",
+                google_url
+                )
 
     # =====================================================
     # SIGNUP
