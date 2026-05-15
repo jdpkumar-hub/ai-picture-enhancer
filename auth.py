@@ -2,7 +2,7 @@ import streamlit as st
 from supabase import create_client, Client
 
 # =====================================================
-# SUPABASE CONNECTION
+# SUPABASE
 # =====================================================
 
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
@@ -12,44 +12,6 @@ supabase: Client = create_client(
     SUPABASE_URL,
     SUPABASE_KEY
 )
-
-# =====================================================
-# SEND EMAIL OTP
-# =====================================================
-
-def send_otp(email):
-
-    try:
-
-        supabase.auth.sign_in_with_otp({
-            "email": email
-        })
-
-        return True
-
-    except Exception as e:
-
-        raise Exception(str(e))
-
-# =====================================================
-# VERIFY OTP
-# =====================================================
-
-def verify_otp(email, otp):
-
-    try:
-
-        response = supabase.auth.verify_otp({
-            "email": email,
-            "token": otp,
-            "type": "email"
-        })
-
-        return response
-
-    except Exception as e:
-
-        raise Exception(str(e))
 
 # =====================================================
 # GOOGLE LOGIN
@@ -62,35 +24,63 @@ def google_login():
         redirect_url = "https://ai-enhancer.streamlit.app"
 
         response = supabase.auth.sign_in_with_oauth({
+
             "provider": "google",
+
             "options": {
                 "redirect_to": redirect_url
             }
+
         })
 
         return response.url
 
     except Exception as e:
 
-        raise Exception(str(e))
+        st.error(str(e))
+
+        return None
 
 # =====================================================
-# GET CURRENT USER
+# SEND OTP LOGIN
+# =====================================================
+
+def send_otp_login(email):
+
+    return supabase.auth.sign_in_with_otp({
+
+        "email": email
+    })
+
+# =====================================================
+# VERIFY OTP
+# =====================================================
+
+def verify_otp(email, otp):
+
+    return supabase.auth.verify_otp({
+
+        "email": email,
+        "token": otp,
+        "type": "email"
+    })
+
+# =====================================================
+# GET USER
 # =====================================================
 
 def get_user():
 
     try:
 
-        response = supabase.auth.get_user()
+        user = supabase.auth.get_user()
 
-        if response and response.user:
-            return response.user
+        if user:
+            return user.user
 
         return None
 
     except:
-
         return None
 
 # =====================================================
@@ -99,10 +89,4 @@ def get_user():
 
 def logout():
 
-    try:
-
-        supabase.auth.sign_out()
-
-    except:
-
-        pass
+    supabase.auth.sign_out()
