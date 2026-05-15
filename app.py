@@ -3,6 +3,8 @@ from PIL import Image
 from auth import login, signup, reset_password
 from enhance import clean_product_image, enhance_photo
 from ai_restore import restore_face
+from storage import upload_image, save_history, get_history
+import io
 
 st.set_page_config(page_title="AI Image Cleaner", layout="wide")
 
@@ -119,17 +121,39 @@ if not st.session_state.user:
 if st.session_state.user:
 
     st.sidebar.success(f"Welcome {st.session_state.user.email}")
-
     option = st.sidebar.radio(
         "Menu",
-        ["Enhance Image", "Logout"]
+        [
+            "Enhance Image",
+            "History",
+            "Logout"
+        ]
     )
-
+ 
     # ---------- LOGOUT ----------
     if option == "Logout":
         st.session_state.user = None
         st.rerun()
+        
+    # ---------- HISTORY ---------------
+    if option == "History":
 
+        st.subheader("📜 Your History")
+
+        history = get_history(
+            st.session_state.user.email
+        )
+
+        for item in history:
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.image(item["original_url"], caption="Original")
+
+            with col2:
+                st.image(item["enhanced_url"], caption="Enhanced")
+                
     # ---------- ENHANCE ----------
     if option == "Enhance Image":
 
@@ -218,3 +242,27 @@ if st.session_state.user:
                         f,
                         file_name="cleaned_image.png"
                     )
+                    
+# SAVE ORIGINAL
+original_buffer = io.BytesIO()
+img.save(original_buffer, format="PNG")
+
+original_url = upload_image(
+    original_buffer.getvalue(),
+    "original.png"
+)
+
+# SAVE ENHANCED
+enhanced_buffer = io.BytesIO()
+result.save(enhanced_buffer, format="PNG")
+
+enhanced_url = upload_image(
+    enhanced_buffer.getvalue(),
+    "enhanced.png"
+)
+# SAVE HISTORY
+save_history(
+    st.session_state.user.email,
+    original_url,
+    enhanced_url
+)
