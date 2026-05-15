@@ -11,31 +11,6 @@ from auth import (
 # HANDLE GOOGLE CALLBACK
 # =====================================================
 
-query_params = st.query_params
-
-if "code" in query_params:
-
-    try:
-
-        code = query_params["code"]
-
-        supabase.auth.exchange_code_for_session({
-            "auth_code": code
-        })
-
-        user_data = supabase.auth.get_user()
-
-        if user_data and user_data.user:
-
-            st.session_state.user = user_data.user
-
-            st.query_params.clear()
-
-            st.rerun()
-
-    except Exception as e:
-
-        st.error(f"Google login failed: {str(e)}")
 
 # =====================================================
 # UI
