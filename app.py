@@ -5,6 +5,8 @@ from auth import (
     get_user
 )
 
+from login import show_login
+
 # =====================================================
 # PAGE CONFIG
 # =====================================================
@@ -16,7 +18,7 @@ st.set_page_config(
 )
 
 # =====================================================
-# HANDLE GOOGLE CALLBACK
+# GOOGLE CALLBACK
 # =====================================================
 
 query_params = st.query_params
@@ -37,17 +39,16 @@ if "code" in query_params:
 
             st.session_state.user = user_data.user
 
-            # Remove code from URL
             st.query_params.clear()
 
-            st.rerun()
+            st.switch_page("pages/1_Enhance.py")
 
     except Exception as e:
 
         st.error(f"Google login failed: {str(e)}")
 
 # =====================================================
-# RESTORE USER SESSION
+# SESSION
 # =====================================================
 
 if "user" not in st.session_state:
@@ -63,4 +64,4 @@ if st.session_state.user:
 
 else:
 
-    from login import *
+    show_login()

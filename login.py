@@ -87,3 +87,6 @@ if "otp_email" in st.session_state:
         except Exception as e:
 
             st.error(str(e))
+            
+if __name__ == "__main__":
+    show_login()
