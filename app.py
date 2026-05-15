@@ -5,8 +5,8 @@ from auth import (
     get_user
 )
 
-#rom login import show_login
- 
+from login import show_login
+
 # =====================================================
 # PAGE CONFIG
 # =====================================================
@@ -52,6 +52,7 @@ if "code" in query_params:
 # =====================================================
 
 if "user" not in st.session_state:
+
     st.session_state.user = get_user()
 
 # =====================================================
