@@ -254,8 +254,8 @@ if st.session_state.user:
                 )
 
             st.write(
-                f"✨ Type: {item['enhancement_type']}"
-            )
+                f"✨ Type: {item.get('enhancement_type', 'Unknown')}"
+            )            
 
             if st.button(
                 "🗑 Delete",
