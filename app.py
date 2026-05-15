@@ -28,4 +28,4 @@ if st.session_state.user:
 
 else:
 
-    import login
+    from login import *
