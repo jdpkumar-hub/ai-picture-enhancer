@@ -10,18 +10,21 @@ supabase = create_client(
 # =========================================
 # UPLOAD IMAGE
 # =========================================
-def upload_image(file_bytes, filename):
 
-    path = f"{uuid.uuid4()}_{filename}"
+def upload_image(file_bytes, folder="originals"):
+
+    filename = f"{folder}/{uuid.uuid4()}.png"
 
     supabase.storage.from_("images").upload(
-        path,
-        file_bytes
+        filename,
+        file_bytes,
+        {"content-type": "image/png"}
     )
 
-    url = supabase.storage.from_("images").get_public_url(path)
+    public_url = supabase.storage.from_("images").get_public_url(filename)
 
-    return url
+    return public_url, filename
+    
 
 # =========================================
 # SAVE HISTORY
@@ -46,3 +49,27 @@ def get_history(email):
         .execute()
 
     return data.data
+# =========================================
+# DELETE HISTORY
+# =========================================
+def delete_history_item(item_id, original_path, enhanced_path):
+    try:
+        # Delete images from bucket
+        supabase.storage.from_("images").remove([
+            original_path,
+            enhanced_path
+        ])
+
+        # Delete DB row
+        supabase.table("history").delete().eq("id", item_id).execute()
+
+        return True
+
+    except Exception as e:
+        print(e)
+        return False
+
+
+# =========================================
+# DELETE HISTORY
+# =========================================        

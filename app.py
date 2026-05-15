@@ -238,7 +238,7 @@ if st.session_state.user:
                         format="PNG"
                     )
 
-                    original_url = upload_image(
+                    original_url, original_path = upload_image(
                         original_buffer.getvalue(),
                         "original.png"
                     )
@@ -253,7 +253,7 @@ if st.session_state.user:
                         format="PNG"
                     )
 
-                    enhanced_url = upload_image(
+                    enhanced_url, enhanced_path = upload_image(
                         enhanced_buffer.getvalue(),
                         "enhanced.png"
                     )
