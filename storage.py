@@ -2,6 +2,10 @@ from supabase import create_client
 import streamlit as st
 import uuid
 
+# =========================================
+# SUPABASE
+# =========================================
+
 supabase = create_client(
     st.secrets["SUPABASE_URL"],
     st.secrets["SUPABASE_KEY"]
@@ -11,7 +15,7 @@ supabase = create_client(
 # UPLOAD IMAGE
 # =========================================
 
-def upload_image(file_bytes, folder="originals"):
+def upload_image(file_bytes, folder="images"):
 
     filename = f"{folder}/{uuid.uuid4()}.png"
 
@@ -24,17 +28,19 @@ def upload_image(file_bytes, folder="originals"):
     public_url = supabase.storage.from_("images").get_public_url(filename)
 
     return public_url, filename
-    
 
 # =========================================
 # SAVE HISTORY
 # =========================================
-def save_history(email,
-                 original_url,
-                 enhanced_url,
-                 enhancement_type,
-                 original_path,
-                 enhanced_path):
+
+def save_history(
+    email,
+    original_url,
+    enhanced_url,
+    enhancement_type,
+    original_path,
+    enhanced_path
+):
 
     supabase.table("history").insert({
         "user_email": email,
@@ -44,47 +50,43 @@ def save_history(email,
         "original_path": original_path,
         "enhanced_path": enhanced_path
     }).execute()
+
 # =========================================
 # GET HISTORY
 # =========================================
+
 def get_history(email):
 
-    data = supabase.table("image_history") \
+    data = supabase.table("history") \
         .select("*") \
         .eq("user_email", email) \
         .order("created_at", desc=True) \
         .execute()
 
     return data.data
+
 # =========================================
 # DELETE HISTORY
 # =========================================
-        
+
 def delete_history_item(item_id, original_path, enhanced_path):
-    if st.button("🗑 Delete", key=row["id"]):
 
-        deleted = delete_history_item(
-            row["id"],
-            row["original_path"],
-            row["enhanced_path"]
-        )
-
-        if deleted:
-            st.success("Deleted!")
-            st.rerun()
     try:
-        # Delete images from bucket
+
+        # DELETE FILES
         supabase.storage.from_("images").remove([
             original_path,
             enhanced_path
         ])
 
-        # Delete DB row
-        supabase.table("history").delete().eq("id", item_id).execute()
+        # DELETE DB ROW
+        supabase.table("history") \
+            .delete() \
+            .eq("id", item_id) \
+            .execute()
 
         return True
 
     except Exception as e:
         print(e)
         return False
-     

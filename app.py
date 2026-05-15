@@ -2,66 +2,122 @@ import streamlit as st
 from PIL import Image
 from auth import login, signup, reset_password
 from enhance import clean_product_image, enhance_photo
-from storage import upload_image, save_history, get_history
+
+from storage import (
+    upload_image,
+    save_history,
+    get_history,
+    delete_history_item
+)
+
 import io
 
-st.set_page_config(page_title="AI Image Cleaner", layout="wide")
+# =========================================================
+# PAGE CONFIG
+# =========================================================
 
-# ---------- UI STYLE ----------
+st.set_page_config(
+    page_title="AI Product Image Cleaner",
+    layout="wide"
+)
+
+# =========================================================
+# UI STYLE
+# =========================================================
+
 st.markdown("""
 <style>
+
 .main {
     background-color: #0E1117;
 }
-h1 {
-    text-align: center;
+
+h1, h2, h3 {
+    color: white;
 }
+
 .stButton>button {
     background: linear-gradient(90deg, #4CAF50, #00C9A7);
     color: white;
     border-radius: 10px;
     height: 45px;
-    width: 100%;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
 }
+
+.stDownloadButton>button {
+    background: linear-gradient(90deg, #4CAF50, #00C9A7);
+    color: white;
+    border-radius: 10px;
+    height: 45px;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
+# =========================================================
+# TITLE
+# =========================================================
+
 st.title("🚀 AI Product Image Cleaner")
 
-# ---------- SESSION ----------
+# =========================================================
+# SESSION
+# =========================================================
+
 if "user" not in st.session_state:
     st.session_state.user = None
 
 # =========================================================
-# 🔐 AUTH SECTION
+# AUTH SECTION
 # =========================================================
+
 if not st.session_state.user:
 
     menu = st.sidebar.selectbox(
         "Menu",
-        ["Login", "Signup", "Reset Password"]
+        [
+            "Login",
+            "Signup",
+            "Reset Password"
+        ]
     )
 
-    # ---------- LOGIN ----------
+    # =====================================================
+    # LOGIN
+    # =====================================================
+
     if menu == "Login":
 
         st.subheader("Login")
 
         email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
+        password = st.text_input(
+            "Password",
+            type="password"
+        )
 
         if st.button("Login"):
 
             if not email or not password:
-                st.warning("Enter email and password")
+                st.warning("Please enter email and password")
 
             else:
+
                 try:
+
                     res = login(email, password)
 
                     if res.user:
+
                         st.session_state.user = res.user
+
                         st.success("Login successful!")
+
                         st.rerun()
 
                     else:
@@ -70,28 +126,44 @@ if not st.session_state.user:
                 except Exception as e:
                     st.error(f"Login failed: {str(e)}")
 
-    # ---------- SIGNUP ----------
+    # =====================================================
+    # SIGNUP
+    # =====================================================
+
     elif menu == "Signup":
 
         st.subheader("Create Account")
 
         email = st.text_input("New Email")
-        password = st.text_input("New Password", type="password")
+        password = st.text_input(
+            "New Password",
+            type="password"
+        )
 
         if st.button("Signup"):
 
             if len(password) < 6:
-                st.warning("Password must be at least 6 characters")
+                st.warning(
+                    "Password must be at least 6 characters"
+                )
 
             else:
+
                 try:
+
                     signup(email, password)
-                    st.success("Account created! Verify your email.")
+
+                    st.success(
+                        "Account created! Verify your email."
+                    )
 
                 except Exception as e:
                     st.error(f"Signup failed: {str(e)}")
 
-    # ---------- RESET PASSWORD ----------
+    # =====================================================
+    # RESET PASSWORD
+    # =====================================================
+
     elif menu == "Reset Password":
 
         st.subheader("Reset Password")
@@ -101,7 +173,9 @@ if not st.session_state.user:
         if st.button("Send Reset Link"):
 
             try:
+
                 reset_password(email)
+
                 st.success("Password reset email sent!")
 
             except Exception as e:
@@ -109,17 +183,23 @@ if not st.session_state.user:
                 msg = str(e)
 
                 if "rate limit" in msg.lower():
-                    st.warning("Too many reset requests. Please wait a few minutes.")
+                    st.warning(
+                        "Too many reset requests. Please wait a few minutes."
+                    )
 
                 else:
                     st.error(f"Reset failed: {msg}")
 
 # =========================================================
-# 🚀 MAIN APP
+# MAIN APP
 # =========================================================
+
 if st.session_state.user:
 
-    st.sidebar.success(f"Welcome {st.session_state.user.email}")
+    st.sidebar.success(
+        f"Welcome {st.session_state.user.email}"
+    )
+
     option = st.sidebar.radio(
         "Menu",
         [
@@ -128,14 +208,21 @@ if st.session_state.user:
             "Logout"
         ]
     )
- 
-    # ---------- LOGOUT ----------
+
+    # =====================================================
+    # LOGOUT
+    # =====================================================
+
     if option == "Logout":
+
         st.session_state.user = None
         st.rerun()
-        
-    # ---------- HISTORY ---------------
-    if option == "History":
+
+    # =====================================================
+    # HISTORY
+    # =====================================================
+
+    elif option == "History":
 
         st.subheader("📜 Your History")
 
@@ -143,31 +230,77 @@ if st.session_state.user:
             st.session_state.user.email
         )
 
+        if not history:
+            st.info("No history found")
+
         for item in history:
+
+            st.markdown("---")
 
             col1, col2 = st.columns(2)
 
             with col1:
-                st.image(item["original_url"], caption="Original")
+                st.image(
+                    item["original_url"],
+                    caption="Original",
+                    use_column_width=True
+                )
 
             with col2:
-                st.image(item["enhanced_url"], caption="Enhanced")
-                
-    # ---------- ENHANCE ----------
-    if option == "Enhance Image":
+                st.image(
+                    item["enhanced_url"],
+                    caption="Enhanced",
+                    use_column_width=True
+                )
 
-        st.subheader("Upload & Clean Your Product Image")
+            st.write(
+                f"✨ Type: {item['enhancement_type']}"
+            )
 
-        # 🔥 Enhancement Type
-        
+            if st.button(
+                "🗑 Delete",
+                key=item["id"]
+            ):
+
+                deleted = delete_history_item(
+                    item["id"],
+                    item["original_path"],
+                    item["enhanced_path"]
+                )
+
+                if deleted:
+                    st.success("Deleted successfully!")
+                    st.rerun()
+
+                else:
+                    st.error("Delete failed")
+
+    # =====================================================
+    # ENHANCE IMAGE
+    # =====================================================
+
+    elif option == "Enhance Image":
+
+        st.subheader(
+            "Upload & Clean Your Product Image"
+        )
+
+        # =================================================
+        # ENHANCEMENT TYPE
+        # =================================================
+
         enhance_type = st.selectbox(
             "Enhancement Type",
             [
                 "Product Clean",
-                "Photo Enhance"                
+                "Photo Enhance"
             ]
-        )        
-        
+        )
+
+        # =================================================
+        # PHOTO MODE
+        # =================================================
+
         photo_mode = "Natural"
 
         if enhance_type == "Photo Enhance":
@@ -181,7 +314,11 @@ if st.session_state.user:
                     "Social Media"
                 ]
             )
-            
+
+        # =================================================
+        # FILE UPLOAD
+        # =================================================
+
         uploaded = st.file_uploader(
             "Upload Image",
             type=["png", "jpg", "jpeg"]
@@ -194,94 +331,113 @@ if st.session_state.user:
             col1, col2 = st.columns(2)
 
             with col1:
+
                 st.image(
                     img,
                     caption="Before",
                     use_column_width=True
                 )
 
-            # 🔥 PROCESS BUTTON
+            # =============================================
+            # PROCESS BUTTON
+            # =============================================
+
             if st.button("✨ Clean Image"):
 
-                with st.spinner("AI processing image..."):
+                with st.spinner(
+                    "AI processing image..."
+                ):
 
+                    # =====================================
                     # PRODUCT CLEAN
-                    # PRODUCT CLEAN
+                    # =====================================
+
                     if enhance_type == "Product Clean":
+
                         result = clean_product_image(img)
 
+                    # =====================================
                     # PHOTO ENHANCE
-                    elif enhance_type == "Photo Enhance":
-                        result = enhance_photo(img, photo_mode)
+                    # =====================================
 
-                  
+                    else:
+
+                        result = enhance_photo(
+                            img,
+                            photo_mode
+                        )
+
+                # =========================================
+                # SHOW RESULT
+                # =========================================
 
                 with col2:
+
                     st.image(
                         result,
                         caption="After",
                         use_column_width=True
                     )
 
-                # SAVE OUTPUT
+                # =========================================
+                # SAVE TEMP OUTPUT
+                # =========================================
+
                 result.save("output.png")
 
+                # =========================================
+                # ORIGINAL BUFFER
+                # =========================================
+
+                original_buffer = io.BytesIO()
+
+                img.save(
+                    original_buffer,
+                    format="PNG"
+                )
+
+                original_url, original_path = upload_image(
+                    original_buffer.getvalue(),
+                    "originals"
+                )
+
+                # =========================================
+                # ENHANCED BUFFER
+                # =========================================
+
+                enhanced_buffer = io.BytesIO()
+
+                result.save(
+                    enhanced_buffer,
+                    format="PNG"
+                )
+
+                enhanced_url, enhanced_path = upload_image(
+                    enhanced_buffer.getvalue(),
+                    "enhanced"
+                )
+
+                # =========================================
+                # SAVE HISTORY
+                # =========================================
+
+                save_history(
+                    st.session_state.user.email,
+                    original_url,
+                    enhanced_url,
+                    enhance_type,
+                    original_path,
+                    enhanced_path
+                )
+
+                # =========================================
                 # DOWNLOAD BUTTON
+                # =========================================
+
                 with open("output.png", "rb") as f:
-                    # =====================================
-                    # SAVE ORIGINAL IMAGE
-                    # =====================================
-                    original_buffer = io.BytesIO()
 
-                    img.save(
-                        original_buffer,
-                        format="PNG"
-                    )
-
-                    original_url, original_path = upload_image(
-                        original_buffer.getvalue(),
-                        "original.png"
-                    )
-
-                    # =====================================
-                    # SAVE ENHANCED IMAGE
-                    # =====================================
-                    enhanced_buffer = io.BytesIO()
-
-                    result.save(
-                        enhanced_buffer,
-                        format="PNG"
-                    )
-
-                    enhanced_url, enhanced_path = upload_image(
-                        enhanced_buffer.getvalue(),
-                        "enhanced.png"
-                    )
-
-                    # =====================================
-                    # SAVE HISTORY
-                    # =====================================
-                    def save_history(
-                        email,
-                        original_url,
-                        enhanced_url,
-                        enhancement_type,
-                        original_path,
-                        enhanced_path
-                    ):
-
-                        supabase.table("history").insert({
-                            "user_email": email,
-                            "original_url": original_url,
-                            "enhanced_url": enhanced_url,
-                            "enhancement_type": enhancement_type,
-                            "original_path": original_path,
-                            "enhanced_path": enhanced_path
-                        }).execute()
-                    
                     st.download_button(
                         "📥 Download Clean Image",
                         f,
                         file_name="cleaned_image.png"
                     )
-                    
