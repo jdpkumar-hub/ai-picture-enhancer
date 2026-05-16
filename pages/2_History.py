@@ -1,6 +1,9 @@
 import streamlit as st
 
-from auth import supabase
+from auth import (
+    supabase,
+    logout
+)
 
 # =====================================================
 # AUTH CHECK
@@ -19,14 +22,32 @@ if st.session_state.user is None:
     st.stop()
 
 # =====================================================
+# SIDEBAR
+# =====================================================
+
+st.sidebar.success(
+    f"Welcome {st.session_state.user.email}"
+)
+
+if st.sidebar.button("🏠 Enhance Page"):
+
+    st.switch_page("pages/1_Enhance.py")
+
+if st.sidebar.button("🚪 Logout"):
+
+    logout()
+
+    st.session_state.user = None
+
+    st.switch_page("app.py")
+
+    st.stop()
+
+# =====================================================
 # PAGE
 # =====================================================
 
 st.title("📜 History")
-
-# =====================================================
-# USER EMAIL
-# =====================================================
 
 user_email = st.session_state.user.email
 
@@ -55,7 +76,7 @@ if not rows:
     st.info("No history found")
 
 # =====================================================
-# DISPLAY
+# DISPLAY HISTORY
 # =====================================================
 
 for row in rows:
@@ -68,16 +89,43 @@ for row in rows:
 
         st.image(
             row["original_url"],
-            caption="Original"
+            caption="Original",
+            use_container_width=True
         )
 
     with col2:
 
         st.image(
             row["enhanced_url"],
-            caption="Enhanced"
+            caption="Enhanced",
+            use_container_width=True
         )
 
     st.caption(row["created_at"])
+
+    # ==========================================
+    # DELETE BUTTON
+    # ==========================================
+
+    if st.button(
+        f"🗑 Delete",
+        key=row["id"]
+    ):
+
+        try:
+
+            # Delete DB row
+            supabase.table("history").delete().eq(
+                "id",
+                row["id"]
+            ).execute()
+
+            st.success("History deleted")
+
+            st.rerun()
+
+        except Exception as e:
+
+            st.error(f"Delete failed: {str(e)}")
 
     st.divider()
