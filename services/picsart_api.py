@@ -1,6 +1,8 @@
 import requests
+import streamlit as st
 
-API_KEY = "YOUR_PICSART_API_KEY"
+
+API_KEY = "YOUR_REAL_PICSART_API_KEY"
 
 
 def picsart_face_enhance(input_path, output_path):
@@ -25,16 +27,52 @@ def picsart_face_enhance(input_path, output_path):
                 files=files
             )
 
-        print("Status:", response.status_code)
-        print("Response:", response.text)
+        # =========================================
+        # DEBUG OUTPUT
+        # =========================================
+
+        print("STATUS CODE:", response.status_code)
+
+        print("RAW RESPONSE:")
+        print(response.text)
+
+        # =========================================
+        # CHECK STATUS
+        # =========================================
+
+        if response.status_code != 200:
+
+            st.error(f"API Error: {response.status_code}")
+
+            return None
 
         data = response.json()
 
+        print("JSON:", data)
+
+        # =========================================
+        # VALIDATE RESPONSE
+        # =========================================
+
         if "data" not in data:
+
+            st.error("No 'data' field returned")
+
+            return None
+
+        if "url" not in data["data"]:
+
+            st.error("No image URL returned")
 
             return None
 
         enhanced_url = data["data"]["url"]
+
+        print("Enhanced URL:", enhanced_url)
+
+        # =========================================
+        # DOWNLOAD RESULT
+        # =========================================
 
         img_data = requests.get(enhanced_url).content
 
@@ -45,6 +83,8 @@ def picsart_face_enhance(input_path, output_path):
 
     except Exception as e:
 
-        print("PicsArt Error:", e)
+        st.error(f"PicsArt Exception: {str(e)}")
+
+        print("EXCEPTION:", e)
 
         return None
