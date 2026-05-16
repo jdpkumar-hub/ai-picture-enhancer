@@ -1,104 +1,115 @@
 from PIL import Image, ImageEnhance, ImageFilter
 from rembg import remove
-import io
+import numpy as np
+import cv2
 
-# =========================================
-# PRODUCT CLEAN (Background Removal)
-# =========================================
-def clean_product_image(image):
+# =====================================================
+# CLEAN PRODUCT IMAGE
+# =====================================================
 
-    image = image.convert("RGB")
+def clean_product_image(img):
+
+    # Convert
+    img = img.convert("RGB")
 
     # Remove background
-    input_bytes = io.BytesIO()
-    image.save(input_bytes, format="PNG")
+    output = remove(img)
 
-    output_bytes = remove(input_bytes.getvalue())
+    # Convert to OpenCV
+    np_img = np.array(output)
 
-    image = Image.open(io.BytesIO(output_bytes)).convert("RGBA")
+    # Noise reduction
+    denoise = cv2.fastNlMeansDenoisingColored(
+        np_img,
+        None,
+        10,
+        10,
+        7,
+        21
+    )
 
-    # White background
-    white_bg = Image.new("RGBA", image.size, (255, 255, 255, 255))
-    image = Image.alpha_composite(white_bg, image).convert("RGB")
+    # Sharpen
+    kernel = np.array([
+        [0, -1, 0],
+        [-1, 5,-1],
+        [0, -1, 0]
+    ])
 
-    # Enhancement
-    image = image.filter(ImageFilter.SHARPEN)
+    sharpen = cv2.filter2D(
+        denoise,
+        -1,
+        kernel
+    )
 
-    enhancer = ImageEnhance.Contrast(image)
-    image = enhancer.enhance(1.15)
+    # Convert back
+    result = Image.fromarray(sharpen)
 
-    enhancer = ImageEnhance.Sharpness(image)
-    image = enhancer.enhance(1.2)
+    # Enhance contrast
+    contrast = ImageEnhance.Contrast(result)
+    result = contrast.enhance(1.15)
 
-    enhancer = ImageEnhance.Brightness(image)
-    image = enhancer.enhance(1.05)
+    # Enhance sharpness
+    sharpness = ImageEnhance.Sharpness(result)
+    result = sharpness.enhance(1.4)
 
-    return image
+    return result
 
+# =====================================================
+# PHOTO ENHANCE
+# =====================================================
 
-# =========================================
-# NORMAL PHOTO ENHANCEMENT
-# =========================================
-# =========================================
-# NORMAL PHOTO ENHANCEMENT
-# =========================================
-# =========================================
-# ADVANCED PHOTO ENHANCEMENT
-# =========================================
-def enhance_photo(image, mode="Natural"):
+def enhance_photo(img, mode="HD Enhance"):
 
-    image = image.convert("RGB")
+    img = img.convert("RGB")
 
-    # ---------------------------------
-    # NATURAL
-    # ---------------------------------
-    if mode == "Natural":
+    # OpenCV convert
+    np_img = np.array(img)
 
-        enhancer = ImageEnhance.Contrast(image)
-        image = enhancer.enhance(1.05)
+    # Denoise
+    denoise = cv2.fastNlMeansDenoisingColored(
+        np_img,
+        None,
+        8,
+        8,
+        7,
+        21
+    )
 
-        enhancer = ImageEnhance.Sharpness(image)
-        image = enhancer.enhance(1.12)
+    # Sharpen
+    kernel = np.array([
+        [0, -1, 0],
+        [-1, 5,-1],
+        [0, -1, 0]
+    ])
 
-        enhancer = ImageEnhance.Brightness(image)
-        image = enhancer.enhance(1.02)
+    sharpen = cv2.filter2D(
+        denoise,
+        -1,
+        kernel
+    )
 
-    # ---------------------------------
-    # SHARP
-    # ---------------------------------
-    elif mode == "Sharp":
+    result = Image.fromarray(sharpen)
 
-        image = image.filter(ImageFilter.SHARPEN)
+    if mode == "HD Enhance":
 
-        enhancer = ImageEnhance.Contrast(image)
-        image = enhancer.enhance(1.1)
+        contrast = ImageEnhance.Contrast(result)
+        result = contrast.enhance(1.2)
 
-        enhancer = ImageEnhance.Sharpness(image)
-        image = enhancer.enhance(1.3)
+        sharpness = ImageEnhance.Sharpness(result)
+        result = sharpness.enhance(1.6)
 
-    # ---------------------------------
-    # BRIGHT
-    # ---------------------------------
-    elif mode == "Bright":
+    elif mode == "Portrait Enhance":
 
-        enhancer = ImageEnhance.Brightness(image)
-        image = enhancer.enhance(1.15)
+        smooth = result.filter(
+            ImageFilter.SMOOTH_MORE
+        )
 
-        enhancer = ImageEnhance.Contrast(image)
-        image = enhancer.enhance(1.05)
+        contrast = ImageEnhance.Contrast(smooth)
+        result = contrast.enhance(1.1)
 
-    # ---------------------------------
-    # SOCIAL MEDIA
-    # ---------------------------------
-    elif mode == "Social Media":
+    elif mode == "Ultra Sharp":
 
-        enhancer = ImageEnhance.Color(image)
-        image = enhancer.enhance(1.2)
+        sharpness = ImageEnhance.Sharpness(result)
+        result = sharpness.enhance(2.2)
 
-        enhancer = ImageEnhance.Contrast(image)
-        image = enhancer.enhance(1.1)
-
-        enhancer = ImageEnhance.Sharpness(image)
-        image = enhancer.enhance(1.15)
-
-    return image
+    return result

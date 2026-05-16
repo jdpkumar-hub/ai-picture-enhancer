@@ -6,4 +6,8 @@ stripe
 python-dotenv
 rembg
 onnxruntime
-replicate>=0.22.0
+opencv-python-headless
+numpy
+rembg
+
+
