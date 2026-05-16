@@ -54,8 +54,19 @@ if st.sidebar.button("Logout"):
 # =====================================================
 # PAGE
 # =====================================================
+col1, col2 = st.columns([1, 5])
 
-st.title("✨ AI Enhance Workspace")
+with col1:
+
+    st.image(
+        "assets/logo.png",
+        width=80
+    )
+
+with col2:
+
+    st.title("✨ AI Enhance Workspace")
+
 
 # =====================================================
 # REPLICATE TOKEN

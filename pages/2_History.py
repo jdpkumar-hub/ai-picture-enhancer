@@ -52,8 +52,19 @@ if st.sidebar.button("🚪 Logout"):
 # =====================================================
 # PAGE
 # =====================================================
+col1, col2 = st.columns([1, 5])
 
-st.title("📜 History")
+with col1:
+
+    st.image(
+        "assets/logo.png",
+        width=80
+    )
+
+with col2:
+
+    st.title("📜 History")
+
 
 user_email = st.session_state.user.email
 
