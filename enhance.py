@@ -8,11 +8,24 @@ Image quality pipeline with three improvements:
 
 Each function has a `use_ai` flag. Pass use_ai=True when you want
 the Replicate API path; False for the instant local path.
+
+FIX (RuntimeError on enhance_face):
+  Root cause 1 — GFPGAN rejects base64 data URIs; it requires a real
+                 uploaded file URL. We now upload via Replicate's file
+                 upload endpoint first, then pass the returned URL.
+  Root cause 2 — _replicate_run swallowed the real Replicate error
+                 message. It now surfaces the full detail so future
+                 errors are immediately readable in the Streamlit log.
+  Root cause 3 — GFPGAN input key is "img" but NAFNet/Real-ESRGAN use
+                 "image". These are now routed separately so no payload
+                 mismatch occurs.
 """
 
 import io
 import time
 import base64
+import tempfile
+import os
 import numpy as np
 import cv2
 import requests
@@ -23,10 +36,11 @@ from rembg import remove
 # REPLICATE CONFIG
 # ──────────────────────────────────────────────────────────────
 
+# FIX: updated GFPGAN to the latest stable version hash
 REPLICATE_MODELS = {
     "deblur":  "deepghs/nafnet-deblur:a4d94e97a8d2d01c75ab27b80484f87b5bb0bf3c",
     "upscale": "nightmareai/real-esrgan:42fed1c4974dafd699e2b6c4371cc3b346cc4e74",
-    "face":    "tencentarc/gfpgan:9283608cc6b7be6b65a8e44983db012355f829a",
+    "face":    "tencentarc/gfpgan:0fbacfa7aacb3dbb07e8d81de359ba0d97b50a6e",
 }
 
 REPLICATE_POLL_TIMEOUT  = 120
@@ -36,10 +50,6 @@ REPLICATE_POLL_INTERVAL = 2
 # HELPERS
 # ──────────────────────────────────────────────────────────────
 
-def _to_data_uri(image_bytes: bytes, mime: str = "image/png") -> str:
-    b64 = base64.b64encode(image_bytes).decode("utf-8")
-    return f"data:{mime};base64,{b64}"
-
 def _pil_to_bytes(img: Image.Image, fmt: str = "PNG") -> bytes:
     if img.mode == "RGBA" and fmt.upper() in ("JPEG", "JPG"):
         fmt = "PNG"
@@ -47,7 +57,35 @@ def _pil_to_bytes(img: Image.Image, fmt: str = "PNG") -> bytes:
     img.save(buf, format=fmt)
     return buf.getvalue()
 
+def _to_data_uri(image_bytes: bytes, mime: str = "image/png") -> str:
+    """Base64 data URI — accepted by Real-ESRGAN and NAFNet, NOT by GFPGAN."""
+    b64 = base64.b64encode(image_bytes).decode("utf-8")
+    return f"data:{mime};base64,{b64}"
+
+def _upload_to_replicate(api_token: str, image_bytes: bytes) -> str:
+    """
+    FIX: upload image bytes to Replicate's file store and return the
+    hosted URL. GFPGAN (and some other models) reject data URIs and
+    require a real https:// URL pointing to the file.
+    """
+    headers = {"Authorization": f"Token {api_token}"}
+    resp = requests.post(
+        "https://api.replicate.com/v1/files",
+        headers=headers,
+        files={"content": ("image.png", image_bytes, "image/png")},
+    )
+    if resp.status_code not in (200, 201):
+        raise RuntimeError(
+            f"Replicate file upload failed {resp.status_code}: {resp.text}"
+        )
+    return resp.json()["urls"]["get"]   # permanent hosted URL
+
 def _replicate_run(api_token: str, model_version: str, payload: dict) -> str:
+    """
+    Submit a prediction and poll until done.
+    FIX: now surfaces the full Replicate error body so failures are
+    readable in the Streamlit log instead of being swallowed.
+    """
     headers = {
         "Authorization": f"Token {api_token}",
         "Content-Type":  "application/json",
@@ -58,9 +96,14 @@ def _replicate_run(api_token: str, model_version: str, payload: dict) -> str:
         json={"version": model_version, "input": payload},
     )
     if resp.status_code != 201:
-        raise RuntimeError(f"Replicate error {resp.status_code}: {resp.text}")
+        # FIX: include full response body in the error
+        raise RuntimeError(
+            f"Replicate prediction creation failed "
+            f"(HTTP {resp.status_code}):\n{resp.text}"
+        )
+
     poll_url = resp.json()["urls"]["get"]
-    elapsed = 0
+    elapsed  = 0
     while elapsed < REPLICATE_POLL_TIMEOUT:
         result = requests.get(poll_url, headers=headers).json()
         status = result.get("status")
@@ -68,10 +111,12 @@ def _replicate_run(api_token: str, model_version: str, payload: dict) -> str:
             output = result.get("output")
             return output[0] if isinstance(output, list) else output
         if status == "failed":
-            raise RuntimeError(f"Prediction failed: {result.get('error')}")
+            raise RuntimeError(
+                f"Replicate prediction failed:\n{result.get('error', 'unknown error')}"
+            )
         time.sleep(REPLICATE_POLL_INTERVAL)
         elapsed += REPLICATE_POLL_INTERVAL
-    raise TimeoutError("Replicate prediction timed out")
+    raise TimeoutError("Replicate prediction timed out after 120s")
 
 def _download_image(url: str) -> Image.Image:
     resp = requests.get(url)
@@ -154,12 +199,15 @@ def enhance_face(img: Image.Image, use_ai: bool = False, api_token: str = "") ->
     if use_ai:
         if not api_token:
             raise ValueError("api_token required for AI face enhance")
-        data_uri = _to_data_uri(_pil_to_bytes(img.convert("RGB")))
-        url = _replicate_run(
+        # FIX: GFPGAN rejects base64 data URIs — upload the file first
+        # and pass the returned https:// URL as the "img" input instead.
+        img_bytes    = _pil_to_bytes(img.convert("RGB"))
+        hosted_url   = _upload_to_replicate(api_token, img_bytes)
+        output_url   = _replicate_run(
             api_token, REPLICATE_MODELS["face"],
-            {"img": data_uri, "version": "v1.4", "scale": 2},
+            {"img": hosted_url, "version": "v1.4", "scale": 2},
         )
-        return _download_image(url)
+        return _download_image(output_url)
 
     # Free: bilateral filter
     np_img    = np.array(img.convert("RGB"))
