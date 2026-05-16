@@ -59,8 +59,6 @@ with st.sidebar:
         width=270
     )
 
-#    st.markdown("# AI Image Enhancer")
-
     st.caption(" Smart image Enhancer")
 
     st.markdown(
@@ -71,35 +69,23 @@ with st.sidebar:
     if st.button("🏠 Home",use_container_width=True):
         st.switch_page("app.py")
 
-    if st.button("✨ Enhance",use_container_width=True):
-        st.switch_page("pages/1_Enhance.py")
-
     if st.button("📜 History",use_container_width=True):
         st.switch_page("pages/2_History.py")
 
     if st.button("👤 Profile",use_container_width=True):
         st.switch_page("pages/3_Profile.py")
-
-    st.markdown(
-        "<div class='sidebar-divider'></div>",
-        unsafe_allow_html=True
-    )
-if st.sidebar.button("🚪 Logout",use_container_width=True):
+    st.markdown("<div class='sidebar-divider'></div>",unsafe_allow_html=True)
+    
+    if st.sidebar.button("🚪 Logout",use_container_width=True):
 
     logout()
-
     st.session_state.user = None
-
     st.switch_page("app.py")
-
     st.stop()
     
 st.sidebar.success(
     f"Welcome {st.session_state.user.email}"
 )
-
-
-#======================================================== 
 
 # =====================================================
 # REPLICATE TOKEN
