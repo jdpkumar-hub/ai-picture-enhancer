@@ -18,10 +18,11 @@ st.set_page_config(
 )
 
 # =====================================================
-# GOOGLE CALLBACK
+# QUERY PARAMS
 # =====================================================
 
 query_params = st.query_params
+
 # =====================================================
 # PASSWORD RECOVERY
 # =====================================================
@@ -57,7 +58,6 @@ if "type" in query_params:
                 try:
 
                     supabase.auth.update_user({
-
                         "password": new_password
                     })
 
@@ -74,7 +74,11 @@ if "type" in query_params:
                     st.error(str(e))
 
         st.stop()
-#=============================================================
+
+# =====================================================
+# GOOGLE LOGIN CALLBACK
+# =====================================================
+
 if "code" in query_params:
 
     try:
