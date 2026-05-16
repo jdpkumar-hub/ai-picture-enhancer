@@ -32,6 +32,16 @@ st.markdown(
     hide_streamlit_style,
     unsafe_allow_html=True
 )
+
+st.markdown("""
+<style>
+
+section[data-testid="stSidebar"] {
+    width: 320px !important;
+}
+
+</style>
+""", unsafe_allow_html=True)
 #=====================================SIDE BAR ========
 st.sidebar.image(
     "assets/logo.png",
