@@ -11,7 +11,7 @@ from auth import (
 
 if "user" not in st.session_state:
 
-    st.switch_page("app.py")
+    st.switch_page("App.py")
 
     st.stop()
 
