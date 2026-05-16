@@ -45,7 +45,7 @@ section[data-testid="stSidebar"] {
 #=====================================SIDE BAR ========
 st.sidebar.image(
     "assets/logo.png",
-    width=140
+    width=240
 )
 
 st.sidebar.markdown("# AI Image Enhancer")
