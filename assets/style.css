@@ -39,25 +39,37 @@ section[data-testid="stSidebar"] {
    BUTTONS
 ========================================= */
 
+/* =========================================
+   SIDEBAR BUTTONS
+========================================= */
+
 .stButton > button {
 
-    width: 100%;
+    width: 100% !important;
 
-    border-radius: 7px;
+    display: block;
 
-    padding: 8px;
+    border-radius: 12px;
+
+    padding: 14px 18px;
 
     font-size: 18px;
 
     font-weight: 500;
 
-    border: 2px solid #dfe3ea;
+    border: 1px solid #dfe3ea;
 
     background-color: white;
 
     color: #1f2937;
 
     transition: all 0.2s ease-in-out;
+
+    text-align: left;
+
+    margin-bottom: 12px;
+
+    min-height: 60px;
 }
 
 .stButton > button:hover {
@@ -68,7 +80,6 @@ section[data-testid="stSidebar"] {
 
     color: #111827;
 }
-
 /* =========================================
    PAGE TITLE
 ========================================= */
