@@ -32,7 +32,35 @@ st.markdown(
     hide_streamlit_style,
     unsafe_allow_html=True
 )
+#=====================================SIDE BAR ========
+st.sidebar.image(
+    "assets/logo.png",
+    width=140
+)
 
+st.sidebar.markdown("# AI Image Enhancer")
+
+st.sidebar.caption(
+    "🚀 Smart image Enhancer"
+)
+
+st.sidebar.divider()
+
+if st.sidebar.button("🏠 Home"):
+    st.switch_page("app.py")
+
+if st.sidebar.button("✨ Enhance"):
+    st.switch_page("pages/1_Enhance.py")
+
+if st.sidebar.button("📜 History"):
+    st.switch_page("pages/2_History.py")
+
+if st.sidebar.button("👤 Profile"):
+    st.switch_page("pages/3_Profile.py")
+
+st.sidebar.divider()
+
+st.sidebar.caption("Built by JDP Kumar 🚀")
 # =====================================================
 # QUERY PARAMS
 # =====================================================
