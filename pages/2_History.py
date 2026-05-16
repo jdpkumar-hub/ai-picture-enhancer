@@ -11,13 +11,13 @@ from auth import (
 
 if "user" not in st.session_state:
 
-    st.switch_page("App.py")
+    st.switch_page("app.py")
 
     st.stop()
 
 if st.session_state.user is None:
 
-    st.switch_page("App.py")
+    st.switch_page("app.py")
 
     st.stop()
 

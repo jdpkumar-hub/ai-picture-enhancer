@@ -30,7 +30,7 @@ if "user" not in st.session_state:
 
     st.warning("Please login first")
 
-    st.switch_page("App.py")
+    st.switch_page("app.py")
 
     st.stop()
 
@@ -38,7 +38,7 @@ if st.session_state.user is None:
 
     st.warning("Please login first")
 
-    st.switch_page("App.py")
+    st.switch_page("app.py")
 
     st.stop()
 
@@ -67,15 +67,26 @@ if st.sidebar.button("🚪 Logout"):
 
     st.session_state.user = None
 
-    st.switch_page("App.py")
+    st.switch_page("app.py")
 
     st.stop()
 
 # =====================================================
-# PAGE
+# HEADER
 # =====================================================
-st.title("✨ AI Enhance Workspace")
 
+col1, col2 = st.columns([1, 5])
+
+with col1:
+
+    st.image(
+        "assets/logo.png",
+        width=80
+    )
+
+with col2:
+
+    st.title("✨ AI Enhance Workspace")
 
 # =====================================================
 # REPLICATE TOKEN
@@ -125,6 +136,10 @@ mode_label = st.selectbox(
 
 mode = MODES[mode_label]
 
+# =====================================================
+# UPLOAD
+# =====================================================
+
 uploaded = st.file_uploader(
     "Upload Image",
     type=["png", "jpg", "jpeg"]
@@ -156,9 +171,9 @@ if uploaded:
 
             token = REPLICATE_TOKEN if has_ai else ""
 
-            # -----------------------------------------
-            # QUICK MODES
-            # -----------------------------------------
+            # ==========================================
+            # QUICK ENHANCE
+            # ==========================================
 
             if mode == "hd":
 
@@ -181,17 +196,17 @@ if uploaded:
                     "Ultra Sharp"
                 )
 
-            # -----------------------------------------
-            # PRODUCT
-            # -----------------------------------------
+            # ==========================================
+            # PRODUCT CLEAN
+            # ==========================================
 
             elif mode == "product":
 
                 result = clean_product_image(img)
 
-            # -----------------------------------------
+            # ==========================================
             # DEBLUR
-            # -----------------------------------------
+            # ==========================================
 
             elif mode in (
                 "deblur_free",
@@ -204,9 +219,9 @@ if uploaded:
                     api_token=token
                 )
 
-            # -----------------------------------------
+            # ==========================================
             # UPSCALE
-            # -----------------------------------------
+            # ==========================================
 
             elif mode in (
                 "upscale_free",
@@ -221,9 +236,9 @@ if uploaded:
                     api_token=token
                 )
 
-            # -----------------------------------------
-            # FREE FACE ENHANCE
-            # -----------------------------------------
+            # ==========================================
+            # FREE FACE
+            # ==========================================
 
             elif mode == "face_free":
 
@@ -232,9 +247,9 @@ if uploaded:
                     use_ai=False
                 )
 
-            # -----------------------------------------
+            # ==========================================
             # PICSART FACE AI
-            # -----------------------------------------
+            # ==========================================
 
             elif mode == "face_ai":
 
@@ -243,12 +258,11 @@ if uploaded:
                     exist_ok=True
                 )
 
-                input_path = "temp/input.jpg"
+                input_path = "temp/input.png"
 
-                output_path = "temp/output.jpg"
+                output_path = "temp/output.png"
 
-                # FIX JPEG SAVE ERROR
-                img.convert("RGB").save(input_path)
+                img.save(input_path)
 
                 enhanced = picsart_face_enhance(
                     input_path,
@@ -258,13 +272,7 @@ if uploaded:
                 if enhanced:
 
                     result = Image.open(output_path)
-                    
-                    save_history(
-                        st.session_state.user.email,
-                        mode_label,
-                        input_path,
-                        output_path
-                    )
+
                 else:
 
                     st.error(
@@ -273,9 +281,9 @@ if uploaded:
 
                     st.stop()
 
-        # =================================================
+        # ==========================================
         # SHOW RESULT
-        # =================================================
+        # ==========================================
 
         with col2:
 
@@ -284,40 +292,39 @@ if uploaded:
                 caption="Enhanced",
                 use_container_width=True
             )
-            # ==========================================
-            # SAVE HISTORY
-            # ==========================================
 
-            try:
+        # ==========================================
+        # SAVE HISTORY
+        # ==========================================
 
-                os.makedirs("temp", exist_ok=True)
+        try:
 
-                original_path = "temp/history_original.png"
+            os.makedirs("temp", exist_ok=True)
 
-                enhanced_path = "temp/history_enhanced.png"
+            original_path = "temp/history_original.png"
 
-                # Save original
-                img.convert("RGB").save(original_path)
+            enhanced_path = "temp/history_enhanced.png"
 
-                # Save enhanced
-                result.convert("RGB").save(enhanced_path)
+            img.convert("RGB").save(original_path)
 
-                # Store history
-                save_history(
-                    st.session_state.user.email,
-                    mode_label,
-                    original_path,
-                    enhanced_path
-                )
+            result.convert("RGB").save(enhanced_path)
 
-                st.success("Saved to history")
+            save_history(
+                st.session_state.user.email,
+                mode_label,
+                original_path,
+                enhanced_path
+            )
 
-            except Exception as e:
+        except Exception as e:
 
-                st.error(f"History Save Failed: {str(e)}")
-        # =================================================
+            st.error(
+                f"History Save Failed: {str(e)}"
+            )
+
+        # ==========================================
         # DOWNLOAD
-        # =================================================
+        # ==========================================
 
         img_bytes = image_to_bytes(
             result,
