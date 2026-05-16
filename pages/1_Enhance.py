@@ -222,7 +222,8 @@ if uploaded:
 
                 output_path = "temp/output.jpg"
 
-                img.save(input_path)
+                # FIX JPEG SAVE ERROR
+                img.convert("RGB").save(input_path)
 
                 enhanced = picsart_face_enhance(
                     input_path,
