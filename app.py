@@ -64,16 +64,19 @@ with st.sidebar:
         unsafe_allow_html=True
     )
 
-    if st.button("🏠 Home"):
+    if st.button(
+        "🏠 Home",
+        use_container_width=True
+    ):
         st.switch_page("app.py")
 
-    if st.button("✨ Enhance"):
+    if st.button("✨ Enhance",use_container_width=True):
         st.switch_page("pages/1_Enhance.py")
 
-    if st.button("📜 History"):
+    if st.button("📜 History",use_container_width=True):
         st.switch_page("pages/2_History.py")
 
-    if st.button("👤 Profile"):
+    if st.button("👤 Profile",use_container_width=True):
         st.switch_page("pages/3_Profile.py")
 
     st.markdown(
