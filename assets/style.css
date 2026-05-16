@@ -43,15 +43,15 @@ section[data-testid="stSidebar"] {
 
     width: 100%;
 
-    border-radius: 10px;
+    border-radius: 7px;
 
-    padding: 14px;
+    padding: 8px;
 
     font-size: 18px;
 
     font-weight: 500;
 
-    border: 1px solid #dfe3ea;
+    border: 2px solid #dfe3ea;
 
     background-color: white;
 
