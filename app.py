@@ -57,7 +57,7 @@ with st.sidebar:
 
 #    st.markdown("# AI Image Enhancer")
 
-    st.caption("🚀 Smart image Enhancer")
+    st.caption(" Smart image Enhancer")
 
     st.markdown(
         "<div class='sidebar-divider'></div>",
