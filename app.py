@@ -51,7 +51,7 @@ section[data-testid="stSidebar"] {
 with st.sidebar:
 
     st.image(
-        "assets/logo2.png",
+        "assets/logo.png",
         width=270
     )
 
