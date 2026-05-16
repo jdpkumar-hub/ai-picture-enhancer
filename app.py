@@ -52,7 +52,7 @@ with st.sidebar:
 
     st.image(
         "assets/logo1.png",
-        width=220
+        width=270
     )
 
 #    st.markdown("# AI Image Enhancer")
