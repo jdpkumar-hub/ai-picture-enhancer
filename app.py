@@ -18,8 +18,8 @@ st.markdown(
 # =====================================================
 
 st.set_page_config(
-    page_title="AI Product Image Cleaner",
-    page_icon="🚀",
+    page_title="AI Image Cleaner/Enhancement",
+    page_icon="",
     layout="wide"
 )
 
@@ -84,7 +84,7 @@ with st.sidebar:
         unsafe_allow_html=True
     )
 
-    st.caption("Built by JDP Kumar 🚀")
+    st.caption("Built by JDPK ")
 # =====================================================
 # QUERY PARAMS
 # =====================================================
