@@ -55,7 +55,7 @@ section[data-testid="stSidebar"] {
 
     justify-content: flex-start;
 
-    align-items: center;
+    align-items: left;
 
     gap: 10px;
 
@@ -79,12 +79,12 @@ section[data-testid="stSidebar"] {
 
     margin-bottom: 6px;
 
-    min-height: 58px;
+    min-height: 38px;
 }
 
 .stButton > button:hover {
 
-    border-color: #3b82f6;
+    border-color: #23ed0c;
 
     background-color: #eef4ff;
 
