@@ -43,21 +43,31 @@ section[data-testid="stSidebar"] {
    SIDEBAR BUTTONS
 ========================================= */
 
+/* =========================================
+   SIDEBAR BUTTONS
+========================================= */
+
 .stButton > button {
 
-    width: 220 !important;
+    width: 100% !important;
 
-    display: block;
+    display: flex;
+
+    justify-content: flex-start;
+
+    align-items: center;
+
+    gap: 10px;
 
     border-radius: 12px;
 
-    padding: 14px 18px;
+    padding: 12px 18px;
 
     font-size: 18px;
 
     font-weight: 500;
 
-    border: 2px solid #dfe3ea;
+    border: 1px solid #dfe3ea;
 
     background-color: white;
 
@@ -67,14 +77,14 @@ section[data-testid="stSidebar"] {
 
     text-align: left;
 
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 
-    min-height: 60px;
+    min-height: 58px;
 }
 
 .stButton > button:hover {
 
-    border-color: #31cf1f;
+    border-color: #3b82f6;
 
     background-color: #eef4ff;
 
