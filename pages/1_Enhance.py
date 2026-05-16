@@ -45,25 +45,28 @@ if st.session_state.user is None:
 # =====================================================
 # SIDEBAR
 # =====================================================
+with st.sidebar:
 
-logo_path = Path("assets/logo.png")
+    st.image(
+        "assets/logo.png",
+        width=270
+    )
 
-st.sidebar.image(
-    str(logo_path),
-    width=120
-)
+    st.caption(" Smart image Enhancer")
 
-st.sidebar.markdown("## AI Enhance")
+    st.markdown(
+        "<div class='sidebar-divider'></div>",
+        unsafe_allow_html=True
+    )
 
 st.sidebar.success(
     f"Welcome {st.session_state.user.email}"
 )
 
-if st.sidebar.button("📜 History"):
+if st.button("📜 History",use_container_width=True):
+        st.switch_page("pages/2_History.py")
 
-    st.switch_page("pages/2_History.py")
-
-if st.sidebar.button("🚪 Logout"):
+if st.sidebar.button("🚪 Logout",use_container_width=True):
 
     logout()
 
