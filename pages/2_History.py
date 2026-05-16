@@ -17,13 +17,19 @@ if "user" not in st.session_state:
 
 if st.session_state.user is None:
 
-    st.switch_page("app.py")
+    st.switch_page("App.py")
 
     st.stop()
 
 # =====================================================
 # SIDEBAR
 # =====================================================
+st.sidebar.image(
+    "assets/logo.png",
+    width=120
+)
+
+st.sidebar.markdown("## AI Enhance")
 
 st.sidebar.success(
     f"Welcome {st.session_state.user.email}"
