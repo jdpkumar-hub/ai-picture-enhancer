@@ -106,3 +106,30 @@ h1 {
 .caption {
     color: #6b7280;
 }
+
+/* =========================================
+   REMOVE TOP PAGE SPACE
+========================================= */
+
+.block-container {
+
+    padding-top: 1rem !important;
+
+    padding-bottom: 1rem !important;
+}
+
+/* Optional: tighter layout */
+.main .block-container {
+
+    max-width: 100%;
+
+    padding-left: 2rem;
+
+    padding-right: 2rem;
+}
+
+/* Hide Streamlit top header */
+
+header[data-testid="stHeader"] {
+    display: none;
+}
