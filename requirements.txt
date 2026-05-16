@@ -9,5 +9,5 @@ onnxruntime
 opencv-python-headless
 numpy
 rembg
-
+replicate
 
