@@ -45,12 +45,15 @@ if st.session_state.user is None:
 # =====================================================
 # SIDEBAR
 # =====================================================
+
 with st.sidebar:
 
     st.image(
         "assets/logo.png",
         width=270
     )
+
+#    st.markdown("# AI Image Enhancer")
 
     st.caption(" Smart image Enhancer")
 
@@ -59,13 +62,22 @@ with st.sidebar:
         unsafe_allow_html=True
     )
 
-st.sidebar.success(
-    f"Welcome {st.session_state.user.email}"
-)
+    if st.button("🏠 Home",use_container_width=True):
+        st.switch_page("app.py")
 
-if st.button("📜 History",use_container_width=True):
+    if st.button("✨ Enhance",use_container_width=True):
+        st.switch_page("pages/1_Enhance.py")
+
+    if st.button("📜 History",use_container_width=True):
         st.switch_page("pages/2_History.py")
 
+    if st.button("👤 Profile",use_container_width=True):
+        st.switch_page("pages/3_Profile.py")
+
+    st.markdown(
+        "<div class='sidebar-divider'></div>",
+        unsafe_allow_html=True
+    )
 if st.sidebar.button("🚪 Logout",use_container_width=True):
 
     logout()
@@ -75,20 +87,13 @@ if st.sidebar.button("🚪 Logout",use_container_width=True):
     st.switch_page("app.py")
 
     st.stop()
+    
+st.sidebar.success(
+    f"Welcome {st.session_state.user.email}"
+)
 
-# =====================================================
-# HEADER
-# =====================================================
 
-#col1, col2 = st.columns([1, 5])
-
-#with col1:
-
-#    st.image(str(logo_path), width=80)
-
-#with col2:
-
-#   st.title("✨ AI Enhance Workspace")
+#======================================================== 
 
 # =====================================================
 # REPLICATE TOKEN
