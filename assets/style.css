@@ -1,0 +1,87 @@
+/* =========================================
+   HIDE DEFAULT STREAMLIT NAV
+========================================= */
+
+[data-testid="stSidebarNav"] {
+    display: none;
+}
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+section[data-testid="stSidebar"] {
+    width: 320px !important;
+    background-color: #f5f7fb;
+}
+
+/* =========================================
+   LOGO AREA
+========================================= */
+
+.logo-area {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+/* =========================================
+   SIDEBAR DIVIDER
+========================================= */
+
+.sidebar-divider {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    border-top: 1px solid #dcdcdc;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.stButton > button {
+
+    width: 100%;
+
+    border-radius: 10px;
+
+    padding: 14px;
+
+    font-size: 18px;
+
+    font-weight: 500;
+
+    border: 1px solid #dfe3ea;
+
+    background-color: white;
+
+    color: #1f2937;
+
+    transition: all 0.2s ease-in-out;
+}
+
+.stButton > button:hover {
+
+    border-color: #3b82f6;
+
+    background-color: #eef4ff;
+
+    color: #111827;
+}
+
+/* =========================================
+   PAGE TITLE
+========================================= */
+
+h1 {
+    font-size: 48px !important;
+    font-weight: 700 !important;
+}
+
+/* =========================================
+   INFO TEXT
+========================================= */
+
+.caption {
+    color: #6b7280;
+}
