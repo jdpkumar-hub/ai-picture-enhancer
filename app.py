@@ -1,4 +1,5 @@
 import streamlit as st
+from pathlib import Path
 
 from auth import (
     supabase,
@@ -15,6 +16,21 @@ st.set_page_config(
     page_title="AI Product Image Cleaner",
     page_icon="🚀",
     layout="wide"
+)
+
+hide_streamlit_style = """
+<style>
+
+[data-testid="stSidebarNav"] {
+    display: none;
+}
+
+</style>
+"""
+
+st.markdown(
+    hide_streamlit_style,
+    unsafe_allow_html=True
 )
 
 # =====================================================
