@@ -79,7 +79,7 @@ section[data-testid="stSidebar"] {
 
     margin-bottom: 6px;
 
-    min-height: 38px;
+    min-height: 18px;
 }
 
 .stButton > button:hover {
