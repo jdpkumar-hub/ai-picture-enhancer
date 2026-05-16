@@ -2,7 +2,7 @@ import requests
 import streamlit as st
 
 
-API_KEY = "YOUR_REAL_PICSART_API_KEY"
+API_KEY = "paat-G881LAcoPNP566t7AIRkCXGx07f"
 
 
 def picsart_face_enhance(input_path, output_path):
