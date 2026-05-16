@@ -7,7 +7,12 @@ from auth import (
 )
 
 from login import show_login
+from services.load_css import load_css
 
+st.markdown(
+    load_css(),
+    unsafe_allow_html=True
+)
 # =====================================================
 # PAGE CONFIG
 # =====================================================
@@ -43,34 +48,40 @@ section[data-testid="stSidebar"] {
 </style>
 """, unsafe_allow_html=True)
 #=====================================SIDE BAR ========
-st.sidebar.image(
-    "assets/logo.png",
-    width=240
-)
+with st.sidebar:
 
-st.sidebar.markdown("# AI Image Enhancer")
+    st.image(
+        "assets/logo.png",
+        width=220
+    )
 
-st.sidebar.caption(
-    "🚀 Smart image Enhancer"
-)
+    st.markdown("# AI Image Enhancer")
 
-st.sidebar.divider()
+    st.caption("🚀 Smart image Enhancer")
 
-if st.sidebar.button("🏠 Home"):
-    st.switch_page("app.py")
+    st.markdown(
+        "<div class='sidebar-divider'></div>",
+        unsafe_allow_html=True
+    )
 
-if st.sidebar.button("✨ Enhance"):
-    st.switch_page("pages/1_Enhance.py")
+    if st.button("🏠 Home"):
+        st.switch_page("app.py")
 
-if st.sidebar.button("📜 History"):
-    st.switch_page("pages/2_History.py")
+    if st.button("✨ Enhance"):
+        st.switch_page("pages/1_Enhance.py")
 
-if st.sidebar.button("👤 Profile"):
-    st.switch_page("pages/3_Profile.py")
+    if st.button("📜 History"):
+        st.switch_page("pages/2_History.py")
 
-st.sidebar.divider()
+    if st.button("👤 Profile"):
+        st.switch_page("pages/3_Profile.py")
 
-st.sidebar.caption("Built by JDP Kumar 🚀")
+    st.markdown(
+        "<div class='sidebar-divider'></div>",
+        unsafe_allow_html=True
+    )
+
+    st.caption("Built by JDP Kumar 🚀")
 # =====================================================
 # QUERY PARAMS
 # =====================================================
