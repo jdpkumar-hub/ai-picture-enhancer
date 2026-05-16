@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-
+from pathlib import Path
 from PIL import Image
 
 from auth import logout
@@ -46,8 +46,10 @@ if st.session_state.user is None:
 # SIDEBAR
 # =====================================================
 
+logo_path = Path("assets/logo.png")
+
 st.sidebar.image(
-    "assets/logo.png",
+    str(logo_path),
     width=120
 )
 
@@ -79,10 +81,7 @@ col1, col2 = st.columns([1, 5])
 
 with col1:
 
-    st.image(
-        "assets/logo.png",
-        width=80
-    )
+    st.image(str(logo_path), width=80)
 
 with col2:
 

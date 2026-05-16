@@ -1,4 +1,5 @@
 import streamlit as st
+from pathlib import Path
 
 from auth import (
     supabase,
@@ -24,8 +25,10 @@ if st.session_state.user is None:
 # =====================================================
 # SIDEBAR
 # =====================================================
+logo_path = Path("assets/logo.png")
+
 st.sidebar.image(
-    "assets/logo.png",
+    str(logo_path),
     width=120
 )
 
