@@ -4,6 +4,12 @@ from pathlib import Path
 from PIL import Image
 
 from auth import logout
+from services.load_css import load_css
+
+st.markdown(
+    load_css(),
+    unsafe_allow_html=True
+)
 
 from services.picsart_api import (
     picsart_face_enhance
