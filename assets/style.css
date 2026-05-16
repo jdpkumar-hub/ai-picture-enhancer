@@ -59,7 +59,7 @@ section[data-testid="stSidebar"] {
 
     gap: 20px;
 
-    border-radius: 12px;
+    border-radius: 5px;
 
     padding: 12px 18px;
 
@@ -67,7 +67,7 @@ section[data-testid="stSidebar"] {
 
     font-weight: 500;
 
-    border: 1px solid #dfe3ea;
+    border: 2px solid #dfe3ea;
 
     background-color: white;
 
