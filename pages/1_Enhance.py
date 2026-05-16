@@ -1,11 +1,16 @@
 import streamlit as st
 import os
+
 from PIL import Image
+
 from auth import logout
-from services.history_service import save_history
- 
+
 from services.picsart_api import (
     picsart_face_enhance
+)
+
+from services.history_service import (
+    save_history
 )
 
 from enhance import (
@@ -18,10 +23,20 @@ from enhance import (
 )
 
 # =====================================================
-# AUTH
+# AUTH CHECK
 # =====================================================
 
 if "user" not in st.session_state:
+
+    st.warning("Please login first")
+
+    st.switch_page("App.py")
+
+    st.stop()
+
+if st.session_state.user is None:
+
+    st.warning("Please login first")
 
     st.switch_page("App.py")
 
@@ -30,6 +45,7 @@ if "user" not in st.session_state:
 # =====================================================
 # SIDEBAR
 # =====================================================
+
 st.sidebar.image(
     "assets/logo.png",
     width=120
@@ -41,31 +57,24 @@ st.sidebar.success(
     f"Welcome {st.session_state.user.email}"
 )
 
-if st.sidebar.button("Logout"):
+if st.sidebar.button("📜 History"):
+
+    st.switch_page("pages/2_History.py")
+
+if st.sidebar.button("🚪 Logout"):
 
     logout()
 
     st.session_state.user = None
 
-    st.switch_page("app.py")
+    st.switch_page("App.py")
 
     st.stop()
 
 # =====================================================
 # PAGE
 # =====================================================
-col1, col2 = st.columns([1, 5])
-
-with col1:
-
-    st.image(
-        "assets/logo.png",
-        width=80
-    )
-
-with col2:
-
-    st.title("✨ AI Enhance Workspace")
+st.title("✨ AI Enhance Workspace")
 
 
 # =====================================================
