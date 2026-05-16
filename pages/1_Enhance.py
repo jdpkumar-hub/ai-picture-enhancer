@@ -3,7 +3,7 @@ import os
 from PIL import Image
 from auth import logout
 from services.history_service import save_history
-
+ 
 from services.picsart_api import (
     picsart_face_enhance
 )
@@ -258,7 +258,37 @@ if uploaded:
                 caption="Enhanced",
                 use_container_width=True
             )
+            # ==========================================
+            # SAVE HISTORY
+            # ==========================================
 
+            try:
+
+                os.makedirs("temp", exist_ok=True)
+
+                original_path = "temp/history_original.png"
+
+                enhanced_path = "temp/history_enhanced.png"
+
+                # Save original
+                img.convert("RGB").save(original_path)
+
+                # Save enhanced
+                result.convert("RGB").save(enhanced_path)
+
+                # Store history
+                save_history(
+                    st.session_state.user.email,
+                    mode_label,
+                    original_path,
+                    enhanced_path
+                )
+
+                st.success("Saved to history")
+
+            except Exception as e:
+
+                st.error(f"History Save Failed: {str(e)}")
         # =================================================
         # DOWNLOAD
         # =================================================
