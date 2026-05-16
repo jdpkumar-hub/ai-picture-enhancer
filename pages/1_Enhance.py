@@ -80,15 +80,15 @@ if st.sidebar.button("🚪 Logout",use_container_width=True):
 # HEADER
 # =====================================================
 
-col1, col2 = st.columns([1, 5])
+#col1, col2 = st.columns([1, 5])
 
-with col1:
+#with col1:
 
-    st.image(str(logo_path), width=80)
+#    st.image(str(logo_path), width=80)
 
-with col2:
+#with col2:
 
-    st.title("✨ AI Enhance Workspace")
+#   st.title("✨ AI Enhance Workspace")
 
 # =====================================================
 # REPLICATE TOKEN
