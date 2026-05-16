@@ -1,38 +1,39 @@
 import streamlit as st
-from auth import logout
 
-# =====================================================
-# AUTH CHECK
-# =====================================================
+from auth import supabase
 
-if "user" not in st.session_state:
+st.title("📜 History")
 
-    st.switch_page("app.py")
+user_email = st.session_state.user.email
 
-# =====================================================
-# SIDEBAR
-# =====================================================
+response = supabase.table(
+    "history"
+).select("*").eq(
+    "user_email",
+    user_email
+).order(
+    "created_at",
+    desc=True
+).execute()
 
-st.sidebar.success(
-    f"Welcome {st.session_state.user.email}"
-)
+rows = response.data
 
-if st.sidebar.button("Logout"):
+if not rows:
 
-    logout()
+    st.info("No history found")
 
-    st.session_state.user = None
+for row in rows:
 
-    st.switch_page("app.py")
+    st.subheader(row["enhancement_type"])
 
-# =====================================================
-# PAGE
-# =====================================================
+    col1, col2 = st.columns(2)
 
-st.title("🕘 Enhancement History")
+    with col1:
+        st.image(row["original_url"])
 
-st.info(
-    "History system will display saved images here."
-)
+    with col2:
+        st.image(row["enhanced_url"])
 
-st.write("No history available yet.")
+    st.caption(row["created_at"])
+
+    st.divider()

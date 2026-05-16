@@ -1,9 +1,8 @@
 import streamlit as st
 import os
-
 from PIL import Image
-
 from auth import logout
+from services.history_service import save_history
 
 from services.picsart_api import (
     picsart_face_enhance
@@ -233,7 +232,13 @@ if uploaded:
                 if enhanced:
 
                     result = Image.open(output_path)
-
+                    
+                    save_history(
+                        st.session_state.user.email,
+                        mode_label,
+                        input_path,
+                        output_path
+                    )
                 else:
 
                     st.error(
