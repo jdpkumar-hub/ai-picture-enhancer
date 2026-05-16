@@ -55,7 +55,7 @@ with st.sidebar:
         width=220
     )
 
-    st.markdown("# AI Image Enhancer")
+#    st.markdown("# AI Image Enhancer")
 
     st.caption("🚀 Smart image Enhancer")
 
