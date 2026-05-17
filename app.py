@@ -1,6 +1,6 @@
 import streamlit as st
 from pathlib import Path
-
+from services.sidebar import render_sidebar
 from auth import (
     supabase,
     get_user
@@ -48,64 +48,7 @@ section[data-testid="stSidebar"] {
 </style>
 """, unsafe_allow_html=True)
 #=====================================SIDE BAR ========
-with st.sidebar:
-
-    st.image(
-        "assets/logo.png",
-        width=270
-    )
-
-#    st.markdown("# AI Image Enhancer")
-
-    st.caption(" :strips: Smart image Enhancer")
-
-    st.markdown(
-        "<div class='sidebar-divider'></div>",
-        unsafe_allow_html=True
-    )
-
-    if st.button("🏠 Home",use_container_width=True):
-        st.switch_page("app.py")
-
-    if st.button("✨ Enhance",use_container_width=True):
-        st.switch_page("pages/1_Enhance.py")
-
-    if st.button("📜 History",use_container_width=True):
-        st.switch_page("pages/2_History.py")
-
-    if st.button("👤 Profile",use_container_width=True):
-        st.switch_page("pages/3_Profile.py")
-
-    if st.button(
-        "🪄 Remove Background",
-        use_container_width=True
-    ):
-        st.switch_page(
-            "pages/4_Background_Remove.py"
-        )
-
-    if st.button(
-        "🧓 Restore Photo",
-        use_container_width=True
-    ):
-        st.switch_page(
-            "pages/5_Old_Photo_Restore.py"
-        )
-
-    if st.button(
-        "🧼 Remove Objects",
-        use_container_width=True
-    ):
-        st.switch_page(
-            "pages/6_Object_Removal.py"
-        )
-
-    st.markdown(
-        "<div class='sidebar-divider'></div>",
-        unsafe_allow_html=True
-    )
-
-    st.caption("Built by JDPK ")
+render_sidebar()
 # =====================================================
 # QUERY PARAMS
 # =====================================================
