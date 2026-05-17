@@ -52,10 +52,6 @@ if st.session_state.user is None:
 # SIDEBAR
 # =====================================================
 
-# =====================================================
-# SIDEBAR
-# =====================================================
-
 with st.sidebar:
 
     st.image(
@@ -96,7 +92,29 @@ with st.sidebar:
         "<div class='sidebar-divider'></div>",
         unsafe_allow_html=True
     )
+    if st.button(
+        "🪄 Remove Background",
+        use_container_width=True
+    ):
+        st.switch_page(
+            "pages/4_Background_Remove.py"
+        )
 
+    if st.button(
+        "🧓 Restore Photo",
+        use_container_width=True
+    ):
+        st.switch_page(
+            "pages/5_Old_Photo_Restore.py"
+        )
+
+    if st.button(
+        "🧼 Remove Objects",
+        use_container_width=True
+    ):
+        st.switch_page(
+            "pages/6_Object_Removal.py"
+        )
     # ==========================================
     # LOGOUT
     # ==========================================
