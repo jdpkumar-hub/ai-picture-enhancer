@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 from services.sidebar import render_sidebar
 from services.load_css import load_css
-from services.object_remove_service import remove_objects
+from services.prompt_edit_service import prompt_edit
 from enhance import image_to_bytes
 
 st.markdown(
@@ -10,19 +10,18 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# =====================================
-# SIDEBAR
-# =====================================
-
+st.title("🤖 AI Prompt Editing")
 # =========== SIDEBAR =================================
 render_sidebar()
 # =====================================================
-
-st.title("🧼 Object Removal")
-
 uploaded = st.file_uploader(
     "Upload Image",
     type=["png", "jpg", "jpeg"]
+)
+
+prompt = st.text_input(
+    "Describe edit",
+    placeholder="Make image brighter and sharper"
 )
 
 if uploaded:
@@ -34,12 +33,15 @@ if uploaded:
     with col1:
         st.image(img, caption="Original")
 
-    if st.button("Remove Objects"):
+    if st.button("Apply AI Edit"):
 
-        result = remove_objects(img)
+        result = prompt_edit(
+            img,
+            prompt
+        )
 
         with col2:
-            st.image(result, caption="Cleaned")
+            st.image(result, caption="AI Edited")
 
         img_bytes = image_to_bytes(
             result,
@@ -47,8 +49,8 @@ if uploaded:
         )
 
         st.download_button(
-            "📥 Download Clean Image",
+            "📥 Download Edited Image",
             data=img_bytes,
-            file_name="cleaned_image.png",
+            file_name="ai_edit.png",
             mime="image/png"
         )

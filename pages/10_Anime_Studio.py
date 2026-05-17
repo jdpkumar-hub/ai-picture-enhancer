@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 from services.sidebar import render_sidebar
 from services.load_css import load_css
-from services.object_remove_service import remove_objects
+from services.anime_service import anime_style
 from enhance import image_to_bytes
 
 st.markdown(
@@ -10,15 +10,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# =====================================
-# SIDEBAR
-# =====================================
-
+st.title("🎨 Anime Studio")
 # =========== SIDEBAR =================================
 render_sidebar()
 # =====================================================
-
-st.title("🧼 Object Removal")
 
 uploaded = st.file_uploader(
     "Upload Image",
@@ -34,12 +29,12 @@ if uploaded:
     with col1:
         st.image(img, caption="Original")
 
-    if st.button("Remove Objects"):
+    if st.button("Convert To Anime"):
 
-        result = remove_objects(img)
+        result = anime_style(img)
 
         with col2:
-            st.image(result, caption="Cleaned")
+            st.image(result, caption="Anime")
 
         img_bytes = image_to_bytes(
             result,
@@ -47,8 +42,8 @@ if uploaded:
         )
 
         st.download_button(
-            "📥 Download Clean Image",
+            "📥 Download Anime",
             data=img_bytes,
-            file_name="cleaned_image.png",
+            file_name="anime.png",
             mime="image/png"
         )

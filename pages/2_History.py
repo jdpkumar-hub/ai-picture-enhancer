@@ -1,5 +1,6 @@
 import streamlit as st
 from pathlib import Path
+from services.sidebar import render_sidebar
 
 from auth import (
     supabase,

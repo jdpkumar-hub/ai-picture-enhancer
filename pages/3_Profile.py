@@ -1,5 +1,5 @@
 import streamlit as st
-
+from services.sidebar import render_sidebar
 from auth import (
     logout
 )
@@ -31,87 +31,9 @@ if st.session_state.user is None:
 
     st.stop()
 
+# =========== SIDEBAR =================================
+render_sidebar()
 # =====================================================
-# SIDEBAR
-# =====================================================
-with st.sidebar:
-
-    st.image(
-        "assets/logo.png",
-        width=240
-    )
-
-    st.caption("🚀 Smart image Enhancer")
-
-    st.markdown(
-        "<div class='sidebar-divider'></div>",
-        unsafe_allow_html=True
-    )
-
-    # ==========================================
-    # MENU
-    # ==========================================
-
-    if st.button(
-        "🏠 Home",
-        use_container_width=True
-    ):
-        st.switch_page("app.py")
-        
-    if st.button("✨ Enhance",use_container_width=True):
-            st.switch_page("pages/1_Enhance.py")
-       
-
-    if st.button(
-        "📜 History",
-        use_container_width=True
-    ):
-        st.switch_page("pages/2_History.py")
-
-    st.markdown(
-        "<div class='sidebar-divider'></div>",
-        unsafe_allow_html=True
-    )
-    if st.button(
-        "🪄 Remove Background",
-        use_container_width=True
-    ):
-        st.switch_page(
-            "pages/4_Background_Remove.py"
-        )
-
-    if st.button(
-        "🧓 Restore Photo",
-        use_container_width=True
-    ):
-        st.switch_page(
-            "pages/5_Old_Photo_Restore.py"
-        )
-
-    if st.button(
-        "🧼 Remove Objects",
-        use_container_width=True
-    ):
-        st.switch_page(
-            "pages/6_Object_Removal.py"
-        )
-    # ==========================================
-    # LOGOUT
-    # ==========================================
-
-    if st.button(
-        "🚪 Logout",
-        use_container_width=True
-    ):
-
-        logout()
-
-        st.session_state.user = None
-
-        st.switch_page("app.py")
-
-        st.stop()
-
     # ==========================================
     # USER
     # ==========================================

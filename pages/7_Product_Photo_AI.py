@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 from services.sidebar import render_sidebar
 from services.load_css import load_css
-from services.object_remove_service import remove_objects
+from services.product_photo_service import product_photo_ai
 from enhance import image_to_bytes
 
 st.markdown(
@@ -10,18 +10,15 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# =====================================
-# SIDEBAR
-# =====================================
+st.title("🛍 AI Product Photography")
+
 
 # =========== SIDEBAR =================================
 render_sidebar()
 # =====================================================
 
-st.title("🧼 Object Removal")
-
 uploaded = st.file_uploader(
-    "Upload Image",
+    "Upload Product Image",
     type=["png", "jpg", "jpeg"]
 )
 
@@ -34,12 +31,12 @@ if uploaded:
     with col1:
         st.image(img, caption="Original")
 
-    if st.button("Remove Objects"):
+    if st.button("Generate Product Photo"):
 
-        result = remove_objects(img)
+        result = product_photo_ai(img)
 
         with col2:
-            st.image(result, caption="Cleaned")
+            st.image(result, caption="AI Product")
 
         img_bytes = image_to_bytes(
             result,
@@ -47,8 +44,8 @@ if uploaded:
         )
 
         st.download_button(
-            "📥 Download Clean Image",
+            "📥 Download Product Photo",
             data=img_bytes,
-            file_name="cleaned_image.png",
+            file_name="product_ai.png",
             mime="image/png"
         )

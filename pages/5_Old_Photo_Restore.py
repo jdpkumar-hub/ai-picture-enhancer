@@ -1,6 +1,6 @@
 import streamlit as st
 from PIL import Image
-
+from services.sidebar import render_sidebar
 from services.load_css import load_css
 from services.restore_service import restore_old_photo
 from enhance import image_to_bytes
@@ -14,35 +14,9 @@ st.markdown(
 # SIDEBAR
 # =====================================
 
-with st.sidebar:
-
-    st.image(
-        "assets/logo.png",
-        width=240
-    )
-
-    st.caption("🚀 Smart image Enhancer")
-
-    st.markdown(
-        "<div class='sidebar-divider'></div>",
-        unsafe_allow_html=True
-    )
-
-    if st.button("🏠 Home", use_container_width=True):
-        st.switch_page("app.py")
-
-    if st.button("✨ Enhance", use_container_width=True):
-        st.switch_page("pages/1_Enhance.py")
-
-    if st.button("🪄 Remove Background", use_container_width=True):
-        st.switch_page("pages/4_Background_Remove.py")
-
-    if st.button("🧓 Restore Photo", use_container_width=True):
-        st.switch_page("pages/5_Old_Photo_Restore.py")
-
-    if st.button("🧼 Remove Objects", use_container_width=True):
-        st.switch_page("pages/6_Object_Removal.py")
-
+# =========== SIDEBAR =================================
+render_sidebar()
+# =====================================================
 
 st.title("🧓 Old Photo Restore")
 
