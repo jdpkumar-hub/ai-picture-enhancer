@@ -1,6 +1,6 @@
 from datetime import datetime
 from auth import supabase
-
+from services.sidebar import render_sidebar
 
 def save_history(
     user_email,
