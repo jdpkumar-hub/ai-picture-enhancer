@@ -4,6 +4,13 @@ from auth import (
     logout
 )
 
+from services.load_css import load_css
+
+st.markdown(
+    load_css(),
+    unsafe_allow_html=True
+)
+
 # =====================================================
 # AUTH CHECK
 # =====================================================
@@ -27,35 +34,66 @@ if st.session_state.user is None:
 # =====================================================
 # SIDEBAR
 # =====================================================
+with st.sidebar:
 
-st.sidebar.image(
-    "assets/logo.png",
-    width=120
-)
+    st.image(
+        "assets/logo.png",
+        width=240
+    )
 
-st.sidebar.markdown("## AI Enhance")
+    st.caption("🚀 Smart image Enhancer")
 
-st.sidebar.success(
-    f"Welcome {st.session_state.user.email}"
-)
+    st.markdown(
+        "<div class='sidebar-divider'></div>",
+        unsafe_allow_html=True
+    )
 
-if st.sidebar.button("✨ Enhance"):
+    # ==========================================
+    # MENU
+    # ==========================================
 
-    st.switch_page("pages/1_Enhance.py")
+    if st.button(
+        "🏠 Home",
+        use_container_width=True
+    ):
+        st.switch_page("app.py")
 
-if st.sidebar.button("📜 History"):
+    if st.button(
+        "📜 History",
+        use_container_width=True
+    ):
+        st.switch_page("pages/2_History.py")
 
-    st.switch_page("pages/2_History.py")
+    st.markdown(
+        "<div class='sidebar-divider'></div>",
+        unsafe_allow_html=True
+    )
 
-if st.sidebar.button("🚪 Logout"):
+    # ==========================================
+    # LOGOUT
+    # ==========================================
 
-    logout()
+    if st.button(
+        "🚪 Logout",
+        use_container_width=True
+    ):
 
-    st.session_state.user = None
+        logout()
 
-    st.switch_page("app.py")
+        st.session_state.user = None
 
-    st.stop()
+        st.switch_page("app.py")
+
+        st.stop()
+
+    # ==========================================
+    # USER
+    # ==========================================
+
+    st.success(
+        f"Welcome {st.session_state.user.email}"
+    )
+
 
 # =====================================================
 # HEADER
