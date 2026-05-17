@@ -57,6 +57,10 @@ with st.sidebar:
         use_container_width=True
     ):
         st.switch_page("app.py")
+        
+    if st.button("✨ Enhance",use_container_width=True):
+            st.switch_page("pages/1_Enhance.py")
+       
 
     if st.button(
         "📜 History",
