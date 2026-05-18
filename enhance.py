@@ -9,7 +9,7 @@ from PIL import (
     ImageFilter
 )
 
-from rembg import remove
+#from rembg import remove
 
 # =====================================================
 # REPLICATE MODELS
