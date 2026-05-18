@@ -42,7 +42,7 @@ def render_sidebar():
             st.switch_page("pages/1_Enhance.py")
 
         if st.button(
-            "🪄 Remove Background",
+            "🪄 Background Remove",
             use_container_width=True
         ):
             st.switch_page(
@@ -50,7 +50,7 @@ def render_sidebar():
             )
 
         if st.button(
-            "🧓 Restore Photo",
+            "🧓 Old Photo Restore",
             use_container_width=True
         ):
             st.switch_page(
@@ -58,7 +58,7 @@ def render_sidebar():
             )
 
         if st.button(
-            "🧼 Remove Objects",
+            "🧼 Object Removal",
             use_container_width=True
         ):
             st.switch_page(
@@ -66,7 +66,7 @@ def render_sidebar():
             )
 
         if st.button(
-            "🛍 Product AI",
+            "🛍 Product Photo AI",
             use_container_width=True
         ):
             st.switch_page(
@@ -74,7 +74,7 @@ def render_sidebar():
             )
 
         if st.button(
-            "🤖 Prompt Edit",
+            "🤖 AI Prompt Edit",
             use_container_width=True
         ):
             st.switch_page(
@@ -82,7 +82,7 @@ def render_sidebar():
             )
 
         if st.button(
-            "📦 Batch Enhance",
+            "📦 Batch Enhancer",
             use_container_width=True
         ):
             st.switch_page(
@@ -136,7 +136,7 @@ def render_sidebar():
             st.stop()
 
         # ==========================================
-        # USER
+        # USER INFO
         # ==========================================
 
         if (
