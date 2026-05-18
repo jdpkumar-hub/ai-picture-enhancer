@@ -4,6 +4,7 @@ import base64
 import numpy as np
 import cv2
 import requests
+from services.sidebar import render_sidebar
 
 from PIL import (
     Image,
