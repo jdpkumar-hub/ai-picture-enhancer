@@ -18,5 +18,5 @@ authlib
 plotly
 pandas
 streamlit-image-comparison
-opencv-python-headless
+
 
