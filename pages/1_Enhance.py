@@ -49,15 +49,10 @@ if st.session_state.user is None:
 
     st.stop()
 
-# =====================================================
-# SIDEBAR
+# =========== SIDEBAR =================================
 render_sidebar()
 # =====================================================
 
-
-    st.success(
-        f"Welcome {st.session_state.user.email}"
-    )
 
 # =====================================================
 # REPLICATE TOKEN
