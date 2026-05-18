@@ -1,10 +1,7 @@
 import io
 import time
 import base64
-import numpy as np
-import cv2
 import requests
-from services.sidebar import render_sidebar
 
 from PIL import (
     Image,
@@ -152,19 +149,15 @@ def deblur_sharpen(img, use_ai=False, api_token=""):
 
         return _download_image(url)
 
-    np_img = np.array(img.convert("RGB"))
-
-    blur = cv2.GaussianBlur(np_img, (0, 0), sigmaX=3)
-
-    sharp = cv2.addWeighted(
-        np_img,
-        1.5,
-        blur,
-        -0.5,
-        0
+    result = img.filter(
+        ImageFilter.SHARPEN
     )
 
-    return Image.fromarray(sharp)
+    result = ImageEnhance.Sharpness(
+        result
+    ).enhance(1.8)
+
+    return result
 
 # =====================================================
 # UPSCALE
@@ -198,15 +191,10 @@ def upscale(
 
     w, h = img.size
 
-    np_img = np.array(img.convert("RGB"))
-
-    resized = cv2.resize(
-        np_img,
+    return img.resize(
         (w * scale, h * scale),
-        interpolation=cv2.INTER_LANCZOS4
+        Image.LANCZOS
     )
-
-    return Image.fromarray(resized)
 
 # =====================================================
 # FACE ENHANCE
@@ -237,16 +225,11 @@ def enhance_face(img, use_ai=False, api_token=""):
 
         return _download_image(output_url)
 
-    np_img = np.array(img.convert("RGB"))
+    result = ImageEnhance.Sharpness(
+        img
+    ).enhance(1.5)
 
-    bilateral = cv2.bilateralFilter(
-        np_img,
-        15,
-        75,
-        75
-    )
-
-    return Image.fromarray(bilateral)
+    return result
 
 # =====================================================
 # PRODUCT CLEAN
@@ -254,28 +237,11 @@ def enhance_face(img, use_ai=False, api_token=""):
 
 def clean_product_image(img):
 
-    img = img.convert("RGB")
+    img = img.convert("RGBA")
 
     output = remove(img)
 
-    np_img = np.array(output)
-
-    rgb = np_img[:, :, :3]
-
-    alpha = np_img[:, :, 3]
-
-    denoise = cv2.fastNlMeansDenoisingColored(
-        rgb,
-        None,
-        10,
-        10,
-        7,
-        21
-    )
-
-    result_np = np.dstack([denoise, alpha])
-
-    return Image.fromarray(result_np, "RGBA")
+    return output
 
 # =====================================================
 # QUICK ENHANCE
@@ -285,32 +251,29 @@ def enhance_photo(img, mode="HD Enhance"):
 
     img = img.convert("RGB")
 
-    np_img = np.array(img)
-
-    denoise = cv2.fastNlMeansDenoisingColored(
-        np_img,
-        None,
-        8,
-        8,
-        7,
-        21
-    )
-
-    result = Image.fromarray(denoise)
+    result = img.copy()
 
     if mode == "HD Enhance":
 
-        result = ImageEnhance.Contrast(result).enhance(1.2)
+        result = ImageEnhance.Contrast(
+            result
+        ).enhance(1.2)
 
-        result = ImageEnhance.Sharpness(result).enhance(1.6)
+        result = ImageEnhance.Sharpness(
+            result
+        ).enhance(1.8)
 
     elif mode == "Portrait Enhance":
 
-        result = result.filter(ImageFilter.SMOOTH_MORE)
+        result = result.filter(
+            ImageFilter.SMOOTH_MORE
+        )
 
     elif mode == "Ultra Sharp":
 
-        result = ImageEnhance.Sharpness(result).enhance(1.8)
+        result = ImageEnhance.Sharpness(
+            result
+        ).enhance(2.2)
 
     return result
 
