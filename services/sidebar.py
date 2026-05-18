@@ -57,61 +57,7 @@ def render_sidebar():
                 "pages/5_Old_Photo_Restore.py"
             )
 
-        if st.button(
-            "🧼 Object Removal",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/6_Object_Removal.py"
-            )
 
-        if st.button(
-            "🛍 Product Photo AI",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/7_Product_Photo_AI.py"
-            )
-
-        if st.button(
-            "🤖 AI Prompt Edit",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/8_AI_Prompt_Edit.py"
-            )
-
-        if st.button(
-            "📦 Batch Enhancer",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/9_Batch_Enhancer.py"
-            )
-
-        if st.button(
-            "🎨 Anime Studio",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/10_Anime_Studio.py"
-            )
-
-        if st.button(
-            "📜 History",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/2_History.py"
-            )
-
-        if st.button(
-            "👤 Profile",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/3_Profile.py"
-            )
 
         st.markdown(
             "<div class='sidebar-divider'></div>",
