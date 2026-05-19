@@ -1,4 +1,4 @@
-#from rembg import remove
+from rembg import remove
 from PIL import Image
 import io
 
