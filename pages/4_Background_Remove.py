@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 from services.sidebar import render_sidebar
-
+from rembg import remove #
 from services.load_css import load_css
 from services.remove_bg_service import remove_background
 from enhance import image_to_bytes
@@ -13,10 +13,7 @@ st.markdown(
 
 # =========== SIDEBAR =================================
 render_sidebar()
-# =====================================================
-# =====================================
-# PAGE
-# =====================================
+
 
 st.title("🪄 Background Removal")
 
