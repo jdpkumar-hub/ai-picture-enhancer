@@ -57,12 +57,12 @@ def render_sidebar():
                 "pages/5_Old_Photo_Restore.py"
             )
  
-		if st.button(
-            "🧼 Object Removal",
+        if st.button(
+            "🛍 Product Photo AI",
             use_container_width=True
         ):
             st.switch_page(
-                "pages/6_Object_Removal.py"
+                "pages/7_Product_Photo_AI.py"
             )
             
         st.markdown(
