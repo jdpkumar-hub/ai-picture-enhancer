@@ -3,6 +3,7 @@ from PIL import Image
 from services.sidebar import render_sidebar
 from services.load_css import load_css
 from enhance import enhance_photo
+from services.auth_guard import require_login
 
 st.markdown(
     load_css(),
@@ -10,6 +11,11 @@ st.markdown(
 )
 
 st.title("📦 Batch Enhancer")
+
+# =============LOGIN REQUIED ==========================
+require_login()
+# =====================================================
+
 # =========== SIDEBAR =================================
 render_sidebar()
 # =====================================================

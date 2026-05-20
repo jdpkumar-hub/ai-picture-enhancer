@@ -4,6 +4,7 @@ from services.sidebar import render_sidebar
 from services.load_css import load_css
 from services.anime_service import anime_style
 from enhance import image_to_bytes
+from services.auth_guard import require_login
 
 st.markdown(
     load_css(),
@@ -11,6 +12,11 @@ st.markdown(
 )
 
 st.title("🎨 Anime Studio")
+
+# =============LOGIN REQUIED ==========================
+require_login()
+# =====================================================
+
 # =========== SIDEBAR =================================
 render_sidebar()
 # =====================================================
