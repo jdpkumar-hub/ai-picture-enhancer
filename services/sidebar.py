@@ -80,6 +80,14 @@ def render_sidebar():
             st.switch_page(
                 "pages/9_Batch_Enhancer.py"
             )
+        if st.button(
+            "🎨 Anime Studio",
+            use_container_width=True
+        ):
+            st.switch_page(
+                "pages/10_Anime_Studio.py"
+            )
+
             
         st.markdown(
             "<div class='sidebar-divider'></div>",
