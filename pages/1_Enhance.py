@@ -6,6 +6,7 @@ from PIL import Image
 from auth import logout
 from services.load_css import load_css
 from services.sidebar import render_sidebar
+from services.auth_guard import require_login
 
 st.markdown(
     load_css(),
@@ -48,6 +49,10 @@ if st.session_state.user is None:
     st.switch_page("app.py")
 
     st.stop()
+
+# =============LOGIN REQUIED ====================
+require_login()
+# =====================================================
 
 # =========== SIDEBAR =================================
 render_sidebar()
