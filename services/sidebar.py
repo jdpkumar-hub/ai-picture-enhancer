@@ -64,6 +64,14 @@ def render_sidebar():
             st.switch_page(
                 "pages/7_Product_Photo_AI.py"
             )
+
+        if st.button(
+            "🤖 AI Prompt Edit",
+            use_container_width=True
+        ):
+            st.switch_page(
+                "pages/8_AI_Prompt_Edit.py"
+            )
             
         st.markdown(
             "<div class='sidebar-divider'></div>",
