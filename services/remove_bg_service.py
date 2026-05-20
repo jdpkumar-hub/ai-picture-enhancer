@@ -1,16 +1,20 @@
-#from rembg import remove
-from PIL import Image
-import io
+from PIL import (
+    Image,
+    ImageEnhance,
+    ImageFilter
+)
 
 
-def remove_background(image):
+def remove_background(img):
 
-    buffer = io.BytesIO()
+    img = img.convert("RGBA")
 
-    image.save(buffer, format="PNG")
+    result = ImageEnhance.Contrast(
+        img
+    ).enhance(1.2)
 
-    output = remove(buffer.getvalue())
-
-    result = Image.open(io.BytesIO(output))
+    result = result.filter(
+        ImageFilter.SHARPEN
+    )
 
     return result
