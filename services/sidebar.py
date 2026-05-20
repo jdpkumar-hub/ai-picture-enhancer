@@ -88,6 +88,13 @@ def render_sidebar():
                 "pages/10_Anime_Studio.py"
             )
 
+        if st.button(
+            "📜 History",
+            use_container_width=True
+        ):
+            st.switch_page(
+                "pages/2_History.py"
+            )
             
         st.markdown(
             "<div class='sidebar-divider'></div>",
