@@ -48,38 +48,7 @@ def render_sidebar():
             st.switch_page(
                 "pages/4_Background_Remove.py"
             )
-            
-        if st.button(
-            "🧓 Old Photo Restore",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/5_Old_Photo_Restore.py"
-            )
 
-		if st.button(
-            "🧼 Object Removal",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/6_Object_Removal.py"
-            )
-
-        if st.button(
-            "🛍 Product Photo AI",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/7_Product_Photo_AI.py"
-            )
-
-        if st.button(
-            "🤖 AI Prompt Edit",
-            use_container_width=True
-        ):
-            st.switch_page(
-                "pages/8_AI_Prompt_Edit.py"
-            ) 
 
         st.markdown(
             "<div class='sidebar-divider'></div>",
