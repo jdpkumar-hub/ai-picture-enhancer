@@ -4,7 +4,7 @@ import requests
 from PIL import Image
 
 
-PICSART_API_KEY = "YOUR_PICSART_API_KEY"
+PICSART_API_KEY = "paat-G881LAcoPNP566t7AIRkCXGx07f"
 
 
 def remove_background(img):
