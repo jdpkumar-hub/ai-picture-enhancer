@@ -4,15 +4,20 @@ from services.sidebar import render_sidebar
 from services.load_css import load_css
 from services.remove_bg_service import remove_background
 from enhance import image_to_bytes
+from services.auth_guard import require_login
 
 st.markdown(
     load_css(),
     unsafe_allow_html=True
 )
 
+# =============LOGIN REQUIED ==========================
+require_login()
+# =====================================================
+
 # =========== SIDEBAR =================================
 render_sidebar()
-
+# =========== SIDEBAR =================================
 
 st.title("🪄 Background Removal")
 
