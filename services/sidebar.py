@@ -56,7 +56,15 @@ def render_sidebar():
             st.switch_page(
                 "pages/5_Old_Photo_Restore.py"
             )
- 
+#            
+		if st.button(
+            "🧼 Object Removal",
+            use_container_width=True
+        ):
+            st.switch_page(
+                "pages/6_Object_Removal.py"
+            )
+# 
         if st.button(
             "🛍 Product Photo AI",
             use_container_width=True
