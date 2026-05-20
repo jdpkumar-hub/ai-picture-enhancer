@@ -72,6 +72,14 @@ def render_sidebar():
             st.switch_page(
                 "pages/8_AI_Prompt_Edit.py"
             )
+
+        if st.button(
+            "📦 Batch Enhancer",
+            use_container_width=True
+        ):
+            st.switch_page(
+                "pages/9_Batch_Enhancer.py"
+            )
             
         st.markdown(
             "<div class='sidebar-divider'></div>",
