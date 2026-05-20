@@ -48,7 +48,15 @@ def render_sidebar():
             st.switch_page(
                 "pages/4_Background_Remove.py"
             )
-
+            
+        if st.button(
+            "🧓 Old Photo Restore",
+            use_container_width=True
+        ):
+            st.switch_page(
+                "pages/5_Old_Photo_Restore.py"
+            )
+ 
 
         st.markdown(
             "<div class='sidebar-divider'></div>",
