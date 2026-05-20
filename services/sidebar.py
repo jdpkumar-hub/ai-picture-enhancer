@@ -57,7 +57,14 @@ def render_sidebar():
                 "pages/5_Old_Photo_Restore.py"
             )
  
-
+		if st.button(
+            "🧼 Object Removal",
+            use_container_width=True
+        ):
+            st.switch_page(
+                "pages/6_Object_Removal.py"
+            )
+            
         st.markdown(
             "<div class='sidebar-divider'></div>",
             unsafe_allow_html=True
