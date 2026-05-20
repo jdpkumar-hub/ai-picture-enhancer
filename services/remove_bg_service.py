@@ -1,8 +1,8 @@
 import io
 import requests
+import streamlit as st
 
 from PIL import Image
-
 
 PICSART_API_KEY = st.secrets["PICSART_API_KEY"]
 
