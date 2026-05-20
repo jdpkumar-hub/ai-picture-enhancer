@@ -32,7 +32,7 @@ def remove_background(img):
     )
 
     if response.status_code != 200:
-
+        print(response.text)
         raise Exception(
             f"API Error: {response.text}"
         )
