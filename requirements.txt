@@ -7,6 +7,6 @@ pandas
 stripe
 torch
 basicsr
-facexlib
+
 
 
