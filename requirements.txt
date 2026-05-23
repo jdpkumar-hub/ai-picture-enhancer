@@ -6,4 +6,9 @@ numpy
 pandas
 stripe
 torch
-
+gfpgan
+realesrgan
+basicsr
+facexlib
+authlib
+plotly
