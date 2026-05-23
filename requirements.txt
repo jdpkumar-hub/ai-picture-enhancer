@@ -5,11 +5,5 @@ requests
 numpy
 pandas
 stripe
-torch
-torchvision
-gfpgan
-realesrgan
-basicsr
-facexlib
-authlib
-plotly
+
+
