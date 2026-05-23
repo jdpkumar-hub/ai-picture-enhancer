@@ -6,4 +6,7 @@ numpy
 pandas
 stripe
 torch
+realesrgan
+basicsr
+facexlib
 
